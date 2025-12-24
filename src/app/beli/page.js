@@ -203,8 +203,9 @@ export default function BeliKad() {
                                 <input type="number" name="gradYear" value={formData.gradYear} onChange={handleChange} required className={styles.input} />
                             </div>
                         </div>
-                        <div className={styles.actions}>
-                            <button onClick={() => setStep(3)} disabled={!formData.name || !formData.phone || !formData.email || !formData.gradYear} className="btn btn-primary full-width">
+                        <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
+                            <button onClick={() => setStep(1)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
+                            <button onClick={() => setStep(3)} disabled={!formData.name || !formData.phone || !formData.email || !formData.gradYear} className="btn btn-primary" style={{ flex: 1 }}>
                                 Seterusnya &rarr;
                             </button>
                         </div>

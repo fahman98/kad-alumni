@@ -188,6 +188,10 @@
     margin-bottom: 1.25rem;
 }
 
+.row .inputGroup {
+    margin-bottom: 0;
+}
+
 /* Error Alert */
 .error {
     color: #b91c1c;

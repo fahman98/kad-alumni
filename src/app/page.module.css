@@ -306,13 +306,100 @@
     border-radius: 6px;
 }
 
+/* Footer */
 .footer {
-    text-align: center;
-    padding: 4rem 0;
-    color: #94a3b8;
-    font-size: 0.9rem;
-    border-top: 1px solid #f1f5f9;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 4rem 2rem 2rem;
     margin-top: 4rem;
+}
+
+.footerContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.footerBrand h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.footerBrand p {
+    color: #94a3b8;
+    line-height: 1.6;
+    max-width: 300px;
+}
+
+.footerLinks h4,
+.footerContact h4 {
+    color: white;
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+    font-weight: 600;
+}
+
+.footerLinks a {
+    display: block;
+    color: #94a3b8;
+    text-decoration: none;
+    margin-bottom: 0.8rem;
+    transition: color 0.2s;
+}
+
+.footerLinks a:hover {
+    color: #3b82f6;
+    transform: translateX(5px);
+    display: inline-block;
+}
+
+.footerContact p {
+    color: #94a3b8;
+    margin-bottom: 0.8rem;
+}
+
+.footerBottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footerBottom p {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+/* Beautiful Admin Button */
+.adminBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.adminBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Mobile */

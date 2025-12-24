@@ -95,9 +95,29 @@ export default function Home() {
             </div>
 
             <footer className={styles.footer}>
-                <p>&copy; 2024 Pusat Alumni UPSI. Hak Cipta Terpelihara.</p>
-                <div style={{ marginTop: '10px' }}>
-                    <Link href="/admin/login" className={styles.adminLink}>Staff Login</Link>
+                <div className={styles.footerContent}>
+                    <div className={styles.footerBrand}>
+                        <h3>ALUMNI DIGITAL</h3>
+                        <p>Identiti rasmi eksklusif untuk anak kandung Suluh Budiman.</p>
+                    </div>
+                    <div className={styles.footerLinks}>
+                        <h4>Pautan Pintas</h4>
+                        <Link href="/beli">Mohon Kad</Link>
+                        <Link href="/semak">Semakan Status</Link>
+                        <a href="https://alumni.upsi.edu.my" target="_blank">Portal Rasmi Alumni</a>
+                    </div>
+                    <div className={styles.footerContact}>
+                        <h4>Hubungi Kami</h4>
+                        <p>Pusat Alumni UPSI</p>
+                        <p>015-4879 7000</p>
+                        <p>alumni@upsi.edu.my</p>
+                    </div>
+                </div>
+                <div className={styles.footerBottom}>
+                    <p>&copy; 2024 Pusat Alumni UPSI. Hak Cipta Terpelihara.</p>
+                    <Link href="/admin/login" className={styles.adminBtn}>
+                        🔒 Staff Login
+                    </Link>
                 </div>
             </footer>
         </main>

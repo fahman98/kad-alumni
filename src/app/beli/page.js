@@ -135,12 +135,27 @@ export default function BeliKad() {
         }
     };
 
+    const steps = [
+        { id: 1, label: 'Semakan' },
+        { id: 2, label: 'Maklumat' },
+        { id: 3, label: 'Pilihan' },
+        { id: 4, label: 'Bayaran' }
+    ];
+
     return (
         <div className={styles.container}>
             <div className={`glass ${styles.formCard}`}>
                 <div className={styles.header}>
-                    <Link href="/" className={styles.backLink}>&larr; Kembali</Link>
                     <h2>Permohonan Kad Alumni</h2>
+                    <div className={styles.progressContainer}>
+                        {steps.map((s, index) => (
+                            <div key={s.id} className={`${styles.progressStep} ${step >= s.id ? styles.activeStep : ''}`}>
+                                <div className={styles.stepCircle}>{s.id}</div>
+                                <span className={styles.stepLabel}>{s.label}</span>
+                                {index < steps.length - 1 && <div className={styles.stepLine}></div>}
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {step === 1 && (
@@ -158,9 +173,12 @@ export default function BeliKad() {
                             />
                         </div>
                         {error && <p className={styles.error}>{error}</p>}
-                        <button onClick={checkIC} disabled={!formData.ic || loading} className="btn btn-primary">
-                            {loading ? 'Menyemak...' : 'Semak & Teruskan'}
-                        </button>
+                        <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
+                            <Link href="/" className="btn btn-outline" style={{ flex: 1, textAlign: 'center', textDecoration: 'none' }}>&larr; Kembali</Link>
+                            <button onClick={checkIC} disabled={!formData.ic || loading} className="btn btn-primary" style={{ flex: 1 }}>
+                                {loading ? 'Menyemak...' : 'Semak & Teruskan'}
+                            </button>
+                        </div>
                     </div>
                 )}
 

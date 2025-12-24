@@ -96,6 +96,9 @@ export default function Home() {
 
             <footer className={styles.footer}>
                 <p>&copy; 2024 Pusat Alumni UPSI. Hak Cipta Terpelihara.</p>
+                <div style={{ marginTop: '10px' }}>
+                    <Link href="/admin/login" className={styles.adminLink}>Staff Login</Link>
+                </div>
             </footer>
         </main>
     );

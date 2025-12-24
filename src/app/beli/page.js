@@ -8,8 +8,10 @@ export default function BeliKad() {
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         name: '',
+        name: '',
         ic: '',
         phone: '',
+        email: '',
         alumniId: '',
         gradYear: '',
         pickupMethod: 'pickup', // pickup | delivery
@@ -175,6 +177,10 @@ export default function BeliKad() {
                             <div className={styles.inputGroup}>
                                 <label>No. Telefon</label>
                                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className={styles.input} />
+                            </div>
+                            <div className={styles.inputGroup}>
+                                <label>Email (Penting untuk Notifikasi)</label>
+                                <input type="email" name="email" value={formData.email} onChange={handleChange} required className={styles.input} placeholder="contoh@gmail.com" />
                             </div>
                             <div className={styles.inputGroup}>
                                 <label>Tahun Graduasi</label>

@@ -5,10 +5,10 @@ import { NextResponse } from 'next/server';
 export async function POST(request) {
     try {
         const body = await request.json();
-        const { name, ic, phone, alumniId, gradYear, pickupMethod, address, receiptUrl } = body;
+        const { name, ic, phone, email, alumniId, gradYear, pickupMethod, address, receiptUrl } = body;
 
         // Basic Validation
-        if (!name || !ic || !phone || !gradYear || !receiptUrl) {
+        if (!name || !ic || !phone || !email || !gradYear || !receiptUrl) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
@@ -17,13 +17,14 @@ export async function POST(request) {
             name,
             ic,
             phone,
-            alumniIdInput: alumniId || '', // User claimed ID
+            email, // Saved to DB
+            alumniIdInput: alumniId || '',
             gradYear,
             pickupMethod,
             address: pickupMethod === 'delivery' ? address : '',
             receiptUrl,
-            status: 'Pending', // Initial status
-            generatedId: '', // To be filled by Admin
+            status: 'Pending',
+            generatedId: '',
             trackingNo: '',
             dfodPrice: 0,
             createdAt: serverTimestamp(),
@@ -31,9 +32,7 @@ export async function POST(request) {
         });
 
         // Email Trigger (Fire and Forget)
-        // In a real production app, use background jobs. Here we await it or just run it.
-        // We reuse the GAS_WEBAPP_URL. Since this is server-side, we should use ENV variable.
-        const GAS_URL = process.env.NEXT_PUBLIC_GAS_API_URL; // User needs to set this
+        const GAS_URL = process.env.NEXT_PUBLIC_GAS_API_URL;
 
         if (GAS_URL) {
             try {
@@ -41,13 +40,16 @@ export async function POST(request) {
                     method: 'POST',
                     body: JSON.stringify({
                         action: "send_email",
-                        to: "user_email@example.com", // In real form we need email input!
-                        // Wait, we didn't ask for Email in the form? 
-                        // Checking requirements: "Sistem ni user akan buat pembelian...".
-                        // Usually email is standard. I should check if I missed "email" field in form.
-                        // If missed, I must add it.
+                        to: email, // Use actual user email
                         subject: "Permohonan Kad Alumni Diterima - " + ic,
-                        body: `Hi ${name},<br><br>Permohonan anda telah diterima dan sedang diproses.<br>Status: Pending Approval.`
+                        body: `
+                            <h3>Terima Kasih, ${name}</h3>
+                            <p>Permohonan Kad Alumni anda telah diterima dan sedang disemak.</p>
+                            <p><strong>Status Semasa: Pending Approval</strong></p>
+                            <p>Kami akan memaklumkan anda melalui email ini sebaik sahaja permohonan diluluskan.</p>
+                            <hr>
+                            <p>Pusat Alumni UPSI</p>
+                        `
                     })
                 });
             } catch (err) {

@@ -4,29 +4,52 @@ import { useState } from 'react';
 import styles from './page.module.css';
 import Link from 'next/link';
 
+import { db } from '../../lib/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+
 export default function SemakStatus() {
     const [id, setId] = useState('');
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const handleCheck = async (e) => {
         e.preventDefault();
         setLoading(true);
         setResult(null);
+        setError('');
 
-        // Simulate Check
-        setTimeout(() => {
-            // Mock Result
-            setResult({
-                status: 'Approved', // Pending, Approved, Rejected, Ready, Shipped
-                details: {
-                    name: 'Ahmad Albab',
-                    alumniId: '192220230101',
-                    trackingNo: 'JNT123456789'
-                }
-            });
+        try {
+            // Trim whitespace from input
+            const cleanId = id.trim();
+
+            // Query by IC Number (Primary)
+            const q = query(collection(db, "orders"), where("ic", "==", cleanId));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                // Found!
+                const data = querySnapshot.docs[0].data();
+                setResult({
+                    status: data.status,
+                    details: {
+                        name: data.name,
+                        alumniId: data.alumniId || null, // Approved/Generated ID
+                        trackingNo: data.trackingNo || null
+                    }
+                });
+            } else {
+                // Try Query by Alumni ID (Secondary) - Optional if we strictly want IC
+                // For MVP let's stick to IC first to avoid complex multiple queries or just simple error
+                setError("Tiada rekod ditemui. Sila pastikan No. KP betul.");
+            }
+
+        } catch (err) {
+            console.error(err);
+            setError("Ralat sistem. Sila cuba sebentar lagi.");
+        } finally {
             setLoading(false);
-        }, 1500);
+        }
     };
 
     return (
@@ -50,6 +73,8 @@ export default function SemakStatus() {
                         {loading ? '...' : 'Semak'}
                     </button>
                 </form>
+
+                {error && <div className={styles.errorMsg}>{error}</div>}
 
                 {result && (
                     <div className={styles.result}>

@@ -59,6 +59,16 @@
     margin-bottom: 2rem;
 }
 
+.errorMsg {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    border: 1px solid #fecaca;
+}
+
 .result {
     margin-top: 2rem;
     background: #f8fafc;

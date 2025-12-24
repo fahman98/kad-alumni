@@ -306,7 +306,19 @@ export default function BeliKad() {
                     <form onSubmit={handleSubmit} className={styles.step}>
                         <h3>Langkah 4: Bukti Bayaran</h3>
                         <div className={styles.alertInfo}>
-                            Sila buat bayaran <strong>RM 50.00</strong> ke akaun <strong>CIMB: 8602660101 (Alumni UPSI)</strong> sebelum muat naik resit.
+                            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                                <p style={{ marginBottom: '10px' }}>Sila buat bayaran <strong>RM 10.00</strong> ke akaun:</p>
+                                <img
+                                    src="/qr-payment.jpg"
+                                    alt="QR Pay"
+                                    style={{ maxWidth: '200px', width: '100%', borderRadius: '8px', border: '1px solid #ddd' }}
+                                    onError={(e) => { e.target.style.display = 'none'; }} // Hide if not found
+                                />
+                                <p style={{ marginTop: '10px', fontSize: '0.9rem' }}><strong>CIMB: 8602660101 (Alumni UPSI)</strong></p>
+                            </div>
+                            <small className={styles.smallText} style={{ textAlign: 'center' }}>
+                                *Sila simpan resit pembayaran untuk dimuat naik di bawah.
+                            </small>
                         </div>
                         <div className={styles.inputGroup}>
                             <label>Muat Naik Resit</label>

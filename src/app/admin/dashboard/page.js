@@ -212,9 +212,12 @@ export default function AdminDashboard() {
                                         <span className={`${styles.badge} ${order.pickupMethod === 'delivery' ? styles.badgeBlue : styles.badgeGray}`}>
                                             {order.pickupMethod === 'delivery' ? 'POS' : 'PICKUP'}
                                         </span>
-                                        {order.trackingNo && (
-                                            <div className={styles.trackingInfo}>
-                                                Trk: {order.trackingNo}
+                                        {order.pickupMethod === 'delivery' && order.trackingNo && (
+                                            <div className={styles.trackingInfo}>Trk: {order.trackingNo}</div>
+                                        )}
+                                        {order.pickupMethod === 'pickup' && (
+                                            <div className={styles.dateInfo}>
+                                                {order.appointmentDate ? `📅 ${order.appointmentDate}` : '⏳ Belum Book'}
                                             </div>
                                         )}
                                     </td>

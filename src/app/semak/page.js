@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 import Link from 'next/link';
 
@@ -8,6 +9,7 @@ import { db } from '../../lib/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export default function SemakStatus() {
+    const router = useRouter();
     const [id, setId] = useState('');
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -56,7 +58,6 @@ export default function SemakStatus() {
         <div className={styles.container}>
             <div className={`glass ${styles.card}`}>
                 <div className={styles.header}>
-                    <Link href="/" className={styles.backLink}>&larr; Utama</Link>
                     <h2>Semakan Status</h2>
                 </div>
 
@@ -98,6 +99,10 @@ export default function SemakStatus() {
                         </div>
                     </div>
                 )}
+
+                <div style={{ marginTop: '2rem' }}>
+                    <button onClick={() => router.push('/')} className="btn btn-outline" style={{ width: '100%' }}>&larr; Kembali</button>
+                </div>
             </div>
         </div>
     );

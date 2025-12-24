@@ -10,18 +10,20 @@ export default function BeliKad() {
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         name: '',
-        name: '',
         ic: '',
         phone: '',
         email: '',
-        alumniId: '',
         gradYear: '',
-        pickupMethod: 'pickup', // pickup | delivery
-        address: '',
+        pickupMethod: 'pickup',
+        address1: '',
+        postcode: '',
+        city: '',
+        state: '',
         receipt: null
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [lookupLoading, setLookupLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -29,6 +31,32 @@ export default function BeliKad() {
             ...prev,
             [name]: name === 'name' ? value.toUpperCase() : value
         }));
+
+        if (name === 'postcode' && value.length === 5) {
+            checkPostcode(value);
+        }
+    };
+
+    const checkPostcode = async (postcode) => {
+        setLookupLoading(true);
+        try {
+            const res = await fetch(`https://api.zippopotam.us/my/${postcode}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.places && data.places.length > 0) {
+                    const place = data.places[0];
+                    setFormData(prev => ({
+                        ...prev,
+                        city: place['place name'],
+                        state: place['state']
+                    }));
+                }
+            }
+        } catch (error) {
+            console.error("Postcode lookup failed", error);
+        } finally {
+            setLookupLoading(false);
+        }
     };
 
     const handleFileChange = (e) => {

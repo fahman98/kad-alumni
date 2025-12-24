@@ -4,65 +4,99 @@ import styles from './page.module.css';
 export default function Home() {
     return (
         <main className={styles.main}>
-            <div className={`${styles.hero} glass`}>
-                <h1 className={styles.title}>KAD ALUMNI</h1>
-                <p className={styles.tagline}>IDENTITI ALUMNI ANAK KANDUNG SULUH BUDIMAN</p>
-                <p className={styles.subtitle}>
-                    Dapatkan Kad Alumni anda sekarang dengan hanya <strong>RM10</strong>.
-                </p>
+            {/* Navbar Placeholder */}
+            <nav className={styles.navbar}>
+                <div className={styles.brand}>ALUMNI DIGITAL</div>
+                <div className={styles.navLinks}>
+                    <Link href="/semak">Semak Status &rarr;</Link>
+                </div>
+            </nav>
 
-                <div className={styles.ctaGrid}>
-                    <div className={`${styles.card} glass`}>
-                        <h2>Permohonan Baru &rarr;</h2>
-                        <p>Belum ada kad? Mohon sekarang.</p>
-                        <Link href="/beli" className="btn btn-primary" style={{ marginTop: '1rem', display: 'inline-block' }}>
-                            Mohon Sekarang
+            <div className={styles.heroSection}>
+                <div className={styles.heroText}>
+                    <span className={styles.pillLabel}>RASMI & EKSKLUSIF</span>
+                    <h1 className={styles.title}>Kad Alumni <br /><span className={styles.highlight}>Anak Kandung</span> <br />Suluh Budiman.</h1>
+                    <p className={styles.desc}>
+                        Identiti digital rasmi untuk alumni UPSI. Nikmati pelbagai keistimewaan eksklusif, kadar sewaan fasiliti istimewa, dan diskaun rakan strategik.
+                    </p>
+                    <div className={styles.heroButtons}>
+                        <Link href="/beli" className={styles.primaryBtn}>
+                            Mohon Sekarang <span className={styles.priceTag}>RM10</span>
+                        </Link>
+                        <Link href="/semak" className={styles.secondaryBtn}>
+                            Semakan Status
                         </Link>
                     </div>
+                    <div className={styles.statsRow}>
+                        <div className={styles.stat}>
+                            <strong>20k+</strong>
+                            <span>Alumni Berdaftar</span>
+                        </div>
+                        <div className={styles.stat}>
+                            <strong>15+</strong>
+                            <span>Rakan Strategik</span>
+                        </div>
+                    </div>
+                </div>
 
-                    <div className={`${styles.card} glass`}>
-                        <h2>Semakan Status &rarr;</h2>
-                        <p>Semak status permohonan kad anda.</p>
-                        <Link href="/semak" className="btn btn-outline" style={{ marginTop: '1rem', display: 'inline-block' }}>
-                            Semak Status
-                        </Link>
+                <div className={styles.heroVisual}>
+                    <div className={styles.floatingCard}>
+                        <div className={styles.cardFront}>
+                            <div className={styles.cardHeader}>
+                                <span>KAD ALUMNI</span>
+                                <span className={styles.uniName}>UPSI</span>
+                            </div>
+                            <div className={styles.cardChip}></div>
+                            <div className={styles.cardNumber}>1922 8849 2024 0001</div>
+                            <div className={styles.cardDetails}>
+                                <div>
+                                    <span className={styles.label}>NAMA</span>
+                                    <span className={styles.value}>AHMAD ALBAB</span>
+                                </div>
+                                <div>
+                                    <span className={styles.label}>TAHUN</span>
+                                    <span className={styles.value}>2023</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.cardGlow}></div>
                     </div>
                 </div>
             </div>
 
-            <div className={styles.infoSection}>
-                <h2 className={styles.sectionTitle}>Keistimewaan Kad Alumni</h2>
-                <div className={styles.benefitsGrid}>
-                    <div className={`${styles.benefitCard} glass`}>
+            <div className={styles.featuresSection}>
+                <div className={styles.featureHeader}>
+                    <h2>Keistimewaan Eksklusif</h2>
+                    <p>Lebih dari sekadar kad pengenalan.</p>
+                </div>
+
+                <div className={styles.bentoGrid}>
+                    <div className={styles.bentoCard}>
                         <h3>5% - 20%</h3>
-                        <p>Kadar sewaan penggunaan kemudahan fasiliti UPSI</p>
+                        <p>Diskaun Sewaan Fasiliti UPSI</p>
                     </div>
-                    <div className={`${styles.benefitCard} glass`}>
-                        <h3>15%</h3>
-                        <p>Yuran Pengajian Pasca Siswazah (Local & International)</p>
-                    </div>
-                    <div className={`${styles.benefitCard} glass`}>
-                        <h3>20%</h3>
-                        <p>Pembelian Buku Terbitan Pejabat Karang Mengarang UPSI</p>
-                    </div>
-                    <div className={`${styles.benefitCard} glass`}>
+                    <div className={`${styles.bentoCard} ${styles.highlightCard}`}>
                         <h3>RM1000</h3>
-                        <p>Yuran Pengajian Pasca Siswazah melalui Program Pesisir</p>
+                        <p>Penjimatan Yuran Pasca Siswazah</p>
                     </div>
-                </div>
-
-                <div className={styles.partnersSection}>
-                    <h3>Potongan Harga Istimewa Bagi Produk:</h3>
-                    <div className={styles.partnerList}>
-                        <span>LG</span>
-                        <span>AI Lab</span>
-                        <span>Acer</span>
-                        <span>Proton</span>
-                        <span>CHN Network</span>
+                    <div className={styles.bentoCard}>
+                        <h3>20%</h3>
+                        <p>Diskaun Pembelian Buku</p>
                     </div>
-                    <p className={styles.smallNote}>Dan banyak lagi rakan strategik UPSI.</p>
+                    <div className={styles.bentoCard}>
+                        <h3>Partner</h3>
+                        <div className={styles.partnerLogos}>
+                            <span>Acer</span>
+                            <span>Proton</span>
+                            <span>DirectD</span>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <footer className={styles.footer}>
+                <p>&copy; 2024 Pusat Alumni UPSI. Hak Cipta Terpelihara.</p>
+            </footer>
         </main>
     );
 }

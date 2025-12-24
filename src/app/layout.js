@@ -9,10 +9,6 @@ export default function RootLayout({ children }) {
     return (
         <html lang="ms">
             <body>
-                <div className="background">
-                    <div className="blob"></div>
-                    <div className="blob"></div>
-                </div>
                 {children}
             </body>
         </html>

@@ -1,214 +1,361 @@
 .main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
     min-height: 100vh;
-    padding: 0 2rem 4rem 2rem;
-    background: transparent;
-    /* Changed to transparent */
-    color: #333;
-    position: relative;
+    background: #f8fafc;
+    color: #0f172a;
+    font-family: 'Inter', sans-serif;
     overflow-x: hidden;
 }
 
-/* Hero Section */
-.hero {
-    padding: 3rem 2rem;
-    text-align: center;
-    max-width: 900px;
-    width: 100%;
-    margin: 2rem 0;
-    z-index: 1;
-    position: relative;
-    border-radius: 24px;
-    /* Clean Glass */
-    background: rgba(255, 255, 255, 0.6);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    animation: bounceIn 0.8s ease-out;
-}
-
-@keyframes bounceIn {
-    0% {
-        transform: scale(0.95);
-        opacity: 0;
-    }
-
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.title {
-    margin: 0;
-    line-height: 1.2;
-    font-size: 3.5rem;
-    font-family: 'Playfair Display', serif;
-    font-weight: 800;
-    /* Elegant Gradient */
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 0.5rem;
-}
-
-.tagline {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #555;
-    margin-bottom: 2rem;
-    font-weight: 600;
-    background: white;
-    padding: 0.4rem 1.2rem;
-    border-radius: 50px;
-    display: inline-block;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-/* Cards */
-.ctaGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    width: 100%;
-    max-width: 800px;
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
-.card {
-    padding: 2rem;
-    text-align: left;
-    background: white;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    position: relative;
-    overflow: hidden;
+.brand {
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: -0.5px;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    border-color: #2a5298;
-}
-
-.card h2 {
-    font-size: 1.4rem;
-    color: #1e3c72;
-    margin-bottom: 0.5rem;
-    font-family: 'Playfair Display', serif;
-}
-
-.card p {
-    color: #666;
-    font-size: 0.95rem;
-}
-
-/* Info Section */
-.infoSection {
-    width: 100%;
-    max-width: 1000px;
-    z-index: 1;
-    position: relative;
-    margin-top: 3rem;
-}
-
-.sectionTitle {
-    text-align: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    margin-bottom: 2rem;
-    color: #333;
-}
-
-.benefitsGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 4rem;
-}
-
-.benefitCard {
-    padding: 1.5rem;
-    text-align: center;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-    transition: all 0.2s ease;
-    border-bottom: 3px solid transparent;
-}
-
-.benefitCard:hover {
-    transform: translateY(-3px);
-    border-bottom-color: #2a5298;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
-.benefitCard h3 {
-    font-size: 2rem;
-    color: #2a5298;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-    font-family: 'Inter', sans-serif;
-}
-
-.benefitCard p {
-    color: #666;
+.navLinks a {
     font-size: 0.9rem;
-    line-height: 1.4;
-}
-
-.partnersSection {
-    text-align: center;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 20px;
-}
-
-.partnerList {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.partnerList span {
     font-weight: 600;
-    color: #555;
-    padding: 0.6rem 1.5rem;
-    border-radius: 10px;
-    background: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    font-size: 0.9rem;
+    color: #64748b;
+    transition: color 0.2s;
 }
 
-.smallNote {
-    margin-top: 1.5rem;
-    color: #888;
+.navLinks a:hover {
+    color: #2563eb;
+}
+
+/* Hero Section */
+.heroSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.heroText {
+    order: 1;
+}
+
+.pillLabel {
+    background: #e0e7ff;
+    color: #4338ca;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+}
+
+.title {
+    font-size: 4rem;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 1.5rem;
+    color: #0f172a;
+}
+
+.highlight {
+    color: #2563eb;
+    position: relative;
+    display: inline-block;
+}
+
+.highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background: rgba(37, 99, 235, 0.1);
+    z-index: -1;
+    transform: rotate(-2deg);
+}
+
+.desc {
+    font-size: 1.1rem;
+    color: #64748b;
+    margin-bottom: 2.5rem;
+    max-width: 450px;
+    line-height: 1.6;
+}
+
+.heroButtons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.primaryBtn {
+    background: #0f172a;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.primaryBtn:hover {
+    transform: translateY(-2px);
+    background: #1e293b;
+}
+
+.priceTag {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 6px;
     font-size: 0.8rem;
 }
 
+.secondaryBtn {
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    border: 2px solid #e2e8f0;
+    color: #0f172a;
+    transition: all 0.2s;
+}
+
+.secondaryBtn:hover {
+    border-color: #0f172a;
+    background: white;
+}
+
+.statsRow {
+    display: flex;
+    gap: 3rem;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 2rem;
+}
+
+.stat strong {
+    font-size: 1.5rem;
+    display: block;
+    color: #0f172a;
+}
+
+.stat span {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* 3D Card Visual */
+.heroVisual {
+    order: 2;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    perspective: 1000px;
+}
+
+.floatingCard {
+    width: 400px;
+    height: 250px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border-radius: 20px;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.5);
+    transform: rotateY(-15deg) rotateX(10deg);
+    transition: transform 0.5s ease;
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.floatingCard:hover {
+    transform: rotateY(0deg) rotateX(0deg) scale(1.05);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+}
+
+.cardChip {
+    width: 50px;
+    height: 35px;
+    background: linear-gradient(135deg, #fbbf24, #d97706);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.cardNumber {
+    color: white;
+    font-family: 'Courier New', monospace;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.cardDetails {
+    display: flex;
+    justify-content: space-between;
+}
+
+.label {
+    display: block;
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 4px;
+}
+
+.value {
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.cardGlow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+    pointer-events: none;
+    transform: rotate(45deg);
+}
+
+/* Features */
+.featuresSection {
+    max-width: 1200px;
+    margin: 5rem auto;
+    padding: 0 2rem;
+}
+
+.featureHeader {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.featureHeader h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.bentoGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.bentoCard {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    border: 1px solid #f1f5f9;
+    transition: transform 0.3s;
+}
+
+.bentoCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.highlightCard {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    grid-column: span 2;
+}
+
+.highlightCard h3 {
+    color: #2563eb;
+}
+
+.bentoCard h3 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.partnerLogos {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.partnerLogos span {
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    background: #f1f5f9;
+    border-radius: 6px;
+}
+
+.footer {
+    text-align: center;
+    padding: 4rem 0;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    border-top: 1px solid #f1f5f9;
+    margin-top: 4rem;
+}
+
 /* Mobile */
+@media (max-width: 1024px) {
+    .heroSection {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+    }
+
+    .heroText {
+        order: 2;
+    }
+
+    .heroVisual {
+        order: 1;
+    }
+
+    .heroButtons,
+    .statsRow {
+        justify-content: center;
+    }
+
+    .desc {
+        margin: 0 auto 2.5rem auto;
+    }
+}
+
 @media (max-width: 768px) {
     .title {
         font-size: 2.5rem;
     }
 
-    .hero {
-        padding: 2rem 1rem;
+    .bentoGrid {
+        grid-template-columns: 1fr;
     }
 
-    .background {
-        height: 100vh;
-        position: fixed;
+    .highlightCard {
+        grid-column: span 1;
+    }
+
+    .floatingCard {
+        width: 100%;
+        max-width: 350px;
     }
 }

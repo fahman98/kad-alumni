@@ -1,31 +1,56 @@
 .container {
-    min-height: 100vh;
-    padding: 2rem;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    background: #f8fafc;
 }
 
 .card {
     width: 100%;
     max-width: 500px;
-    padding: 2.5rem;
+    padding: 3rem;
     background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    text-align: center;
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .header {
-    margin-bottom: 2rem;
-    text-align: center;
-    position: relative;
+    margin-bottom: 2.5rem;
+}
+
+.header h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 0.5rem;
 }
 
 .backLink {
-    position: absolute;
-    left: 0;
-    top: 0;
-    color: #666;
+    color: #64748b;
     font-size: 0.9rem;
+    transition: color 0.2s;
+    font-weight: 500;
+}
+
+.backLink:hover {
+    color: #2563eb;
 }
 
 .searchBox {
@@ -34,62 +59,17 @@
     margin-bottom: 2rem;
 }
 
-.input {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1rem;
-}
-
 .result {
-    border-top: 1px solid #eee;
-    padding-top: 2rem;
-    animation: fadeIn 0.5s ease;
+    margin-top: 2rem;
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    text-align: left;
+    animation: slideUp 0.3s ease;
 }
 
-.statusBadge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    background: #e8f0fe;
-    color: #1a73e8;
-}
-
-.statusBadge[data-status="Approved"] {
-    background: #e6f4ea;
-    color: #137333;
-}
-
-.statusBadge[data-status="Rejected"] {
-    background: #fce8e6;
-    color: #c5221f;
-}
-
-.details p {
-    margin-bottom: 0.5rem;
-    color: #333;
-}
-
-.tracking {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border-left: 4px solid #fbbc04;
-}
-
-.trackLink {
-    display: inline-block;
-    margin-top: 0.5rem;
-    color: #1a73e8;
-    text-decoration: underline;
-}
-
-@keyframes fadeIn {
+@keyframes slideUp {
     from {
         opacity: 0;
         transform: translateY(10px);
@@ -98,5 +78,75 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+.statusBadge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.statusBadge[data-status="Approved"] {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.statusBadge[data-status="Pending"] {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+.statusBadge[data-status="Rejected"] {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.statusBadge[data-status="Shipped"] {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.details p {
+    margin-bottom: 0.5rem;
+    color: #334155;
+    font-size: 0.95rem;
+}
+
+.tracking {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #cbd5e1;
+}
+
+.tracking code {
+    background: #e2e8f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.trackLink {
+    display: inline-block;
+    margin-top: 8px;
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: underline;
+    font-size: 0.9rem;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .searchBox {
+        flex-direction: column;
+    }
+
+    .card {
+        padding: 2rem;
     }
 }

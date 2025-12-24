@@ -25,7 +25,10 @@ export default function BeliKad() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData(prev => ({
+            ...prev,
+            [name]: name === 'name' ? value.toUpperCase() : value
+        }));
     };
 
     const handleFileChange = (e) => {

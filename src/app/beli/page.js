@@ -308,12 +308,31 @@ export default function BeliKad() {
                         <div className={styles.alertInfo}>
                             <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
                                 <p style={{ marginBottom: '10px' }}>Sila buat bayaran <strong>RM 10.00</strong> ke akaun:</p>
-                                <img
-                                    src="/qr-pay.jpg"
-                                    alt="QR Pay"
-                                    style={{ maxWidth: '200px', width: '100%', borderRadius: '8px', border: '1px solid #ddd' }}
-                                />
-                                <p style={{ marginTop: '10px', fontSize: '0.9rem' }}><strong>CIMB: 8602660101 (Alumni UPSI)</strong></p>
+
+                                {/* QR Code Section */}
+                                <div style={{ marginBottom: '15px' }}>
+                                    <img
+                                        src="/qr-pay.jpg"
+                                        alt="QR Pay"
+                                        style={{ maxWidth: '280px', width: '100%', borderRadius: '12px', border: '1px solid #ddd', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
+                                    />
+                                    <div style={{ marginTop: '10px' }}>
+                                        <a href="/qr-pay.jpg" download="QR-Pay-UPSI.jpg" className="btn btn-outline" style={{ padding: '0.4rem 1rem', fontSize: '0.85rem' }}>
+                                            📥 Download QR
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div style={{ background: '#eff6ff', padding: '10px', borderRadius: '8px', fontSize: '0.85rem', color: '#1e40af', marginBottom: '15px', textAlign: 'left' }}>
+                                    <strong>💡 Tips Bayaran Pantas:</strong>
+                                    <ol style={{ margin: '5px 0 0 1.2rem', padding: 0 }}>
+                                        <li>Download gambar QR di atas.</li>
+                                        <li>Buka Apps Bank anda (Maybank/CIMB/TnG dll).</li>
+                                        <li>Pilih <strong>Scan QR</strong> &gt; <strong>Select from Gallery</strong>.</li>
+                                    </ol>
+                                </div>
+
+                                <p style={{ fontSize: '0.9rem' }}><strong>CIMB: 8602660101 (Alumni UPSI)</strong></p>
                             </div>
                             <small className={styles.smallText} style={{ textAlign: 'center' }}>
                                 *Sila simpan resit pembayaran untuk dimuat naik di bawah.

@@ -165,21 +165,19 @@ export default function BeliKad() {
                 )}
 
                 {step === 2 && (
-                    <form onSubmit={handleSubmit} className={styles.step}>
-                        <h3>Langkah 2: Maklumat & Bayaran</h3>
-
+                    <div className={styles.step}>
+                        <h3>Langkah 2: Maklumat Peribadi</h3>
                         <div className={styles.inputGroup}>
                             <label>Nama Penuh</label>
                             <input type="text" name="name" value={formData.name} onChange={handleChange} required className={styles.input} />
                         </div>
-
                         <div className={styles.row}>
                             <div className={styles.inputGroup}>
                                 <label>No. Telefon</label>
                                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className={styles.input} />
                             </div>
                             <div className={styles.inputGroup}>
-                                <label>Email (Penting untuk Notifikasi)</label>
+                                <label>Email</label>
                                 <input type="email" name="email" value={formData.email} onChange={handleChange} required className={styles.input} placeholder="contoh@gmail.com" />
                             </div>
                             <div className={styles.inputGroup}>
@@ -187,9 +185,19 @@ export default function BeliKad() {
                                 <input type="number" name="gradYear" value={formData.gradYear} onChange={handleChange} required className={styles.input} />
                             </div>
                         </div>
+                        <div className={styles.actions}>
+                            <button onClick={() => setStep(3)} disabled={!formData.name || !formData.phone || !formData.email || !formData.gradYear} className="btn btn-primary full-width">
+                                Seterusnya &rarr;
+                            </button>
+                        </div>
+                    </div>
+                )}
 
+                {step === 3 && (
+                    <div className={styles.step}>
+                        <h3>Langkah 3: Kaedah Pengambilan</h3>
                         <div className={styles.inputGroup}>
-                            <label>Kaedah Pengambilan</label>
+                            <label>Pilih Kaedah</label>
                             <select name="pickupMethod" value={formData.pickupMethod} onChange={handleChange} className={styles.input}>
                                 <option value="pickup">Ambil di Pejabat Pusat Alumni</option>
                                 <option value="delivery">Pos (Delivery)</option>
@@ -204,14 +212,32 @@ export default function BeliKad() {
                             </div>
                         )}
 
+                        <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
+                            <button onClick={() => setStep(2)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
+                            <button onClick={() => setStep(4)} disabled={formData.pickupMethod === 'delivery' && !formData.address} className="btn btn-primary" style={{ flex: 1 }}>
+                                Seterusnya &rarr;
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {step === 4 && (
+                    <form onSubmit={handleSubmit} className={styles.step}>
+                        <h3>Langkah 4: Bukti Bayaran</h3>
+                        <div className={styles.alertInfo}>
+                            Sila buat bayaran <strong>RM 50.00</strong> ke akaun <strong>CIMB: 8602660101 (Alumni UPSI)</strong> sebelum muat naik resit.
+                        </div>
                         <div className={styles.inputGroup}>
-                            <label>Muat Naik Resit Bayaran</label>
+                            <label>Muat Naik Resit</label>
                             <input type="file" onChange={handleFileChange} required accept="image/*" className={styles.input} />
                         </div>
 
-                        <button type="submit" disabled={loading} className="btn btn-primary">
-                            {loading ? 'Menghantar...' : 'Hantar Permohonan'}
-                        </button>
+                        <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
+                            <button type="button" onClick={() => setStep(3)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
+                            <button type="submit" disabled={loading} className="btn btn-primary" style={{ flex: 1 }}>
+                                {loading ? 'Menghantar...' : 'Hantar Permohonan'}
+                            </button>
+                        </div>
                     </form>
                 )}
             </div>

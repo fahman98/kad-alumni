@@ -54,10 +54,13 @@ export default function AdminLogin() {
 
                     {error && <p className={styles.error}>{error}</p>}
 
-                    <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '10px' }}>
-                        Log Masuk
-                    </button>
+                    <button type="submit" className="btn btn-primary full-width">Log Masuk</button>
                 </form>
+                <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                    <Link href="/" style={{ color: '#94a3b8', fontSize: '0.9rem', textDecoration: 'none' }}>
+                        &larr; Kembali ke Utama
+                    </Link>
+                </div>
             </div>
         </div>
     );

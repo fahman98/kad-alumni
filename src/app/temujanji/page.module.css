@@ -1,0 +1,142 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    background: #f1f5f9;
+}
+
+.card {
+    width: 100%;
+    max-width: 500px;
+    padding: 2.5rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.header h2 {
+    font-family: 'Playfair Display', serif;
+    color: #0f172a;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.header p {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.backLink {
+    text-decoration: none;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+}
+
+.inputGroup label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.input {
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.infoBox {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1rem;
+}
+
+.statusReady {
+    color: #059669;
+    font-weight: 700;
+}
+
+.hint {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.errorMsg {
+    color: #ef4444;
+    background: #fef2f2;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 0.9rem;
+    border: 1px solid #fee2e2;
+}
+
+.successView {
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.iconCheck {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.dateDisplay {
+    background: #eff6ff;
+    color: #1e40af;
+    font-size: 1.5rem;
+    font-weight: 800;
+    padding: 1rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    border: 2px dashed #bfdbfe;
+}
+
+.note {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

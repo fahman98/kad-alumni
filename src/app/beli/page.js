@@ -27,9 +27,11 @@ export default function BeliKad() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        const upperFields = ['name', 'address1', 'city', 'state'];
+
         setFormData(prev => ({
             ...prev,
-            [name]: name === 'name' ? value.toUpperCase() : value
+            [name]: upperFields.includes(name) ? value.toUpperCase() : value
         }));
 
         if (name === 'postcode' && value.length === 5) {

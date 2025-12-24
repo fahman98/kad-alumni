@@ -151,31 +151,48 @@
 }
 
 .inputGroup {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.inputGroup label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 0.5rem;
+}
+
+.input {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s;
+    background: #f8fafc;
+    width: 100%;
+}
+
+.input:focus {
+    border-color: #3b82f6;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-/* Remove .row > div { flex: 1 } as it is not needed for grid */
-
-.error {
-    color: #ef4444;
-    background: #fef2f2;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-    border: 1px solid #fee2e2;
+    gap: 1.25rem;
+    /* Matches inputGroup margin-bottom */
+    margin-bottom: 1.25rem;
 }
 
 .smallText {
     display: block;
-    margin-top: 6px;
+    margin-top: -0.5rem;
+    /* Pull closer to input above */
+    margin-bottom: 1.25rem;
     color: #94a3b8;
     font-size: 0.8rem;
 }

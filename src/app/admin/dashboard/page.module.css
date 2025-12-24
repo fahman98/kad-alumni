@@ -176,6 +176,10 @@
     background: #16a34a;
 }
 
+.btnReject {
+    background: #dc2626;
+}
+
 .btnProcess {
     background: #d97706;
 }
@@ -188,7 +192,20 @@
     background: #2563eb;
 }
 
-.btnApprove:hover {
+.btnDelete {
+    background: transparent;
+    border: 1px solid #fee2e2;
+    font-size: 1rem;
+    padding: 4px 8px;
+    margin-left: 5px;
+}
+
+.btnDelete:hover {
+    background: #fee2e2;
+}
+
+.btnApprove:hover,
+.btnReject:hover {
     opacity: 0.9;
 }
 

@@ -309,10 +309,9 @@ export default function BeliKad() {
                             <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
                                 <p style={{ marginBottom: '10px' }}>Sila buat bayaran <strong>RM 10.00</strong> ke akaun:</p>
                                 <img
-                                    src="/qr-payment.jpg"
+                                    src="/qr-pay.jpg"
                                     alt="QR Pay"
                                     style={{ maxWidth: '200px', width: '100%', borderRadius: '8px', border: '1px solid #ddd' }}
-                                    onError={(e) => { e.target.style.display = 'none'; }} // Hide if not found
                                 />
                                 <p style={{ marginTop: '10px', fontSize: '0.9rem' }}><strong>CIMB: 8602660101 (Alumni UPSI)</strong></p>
                             </div>

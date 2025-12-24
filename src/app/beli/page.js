@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 import Link from 'next/link';
 
 export default function BeliKad() {
+    const router = useRouter();
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         name: '',
@@ -174,7 +176,7 @@ export default function BeliKad() {
                         </div>
                         {error && <p className={styles.error}>{error}</p>}
                         <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
-                            <Link href="/" className="btn btn-outline" style={{ flex: 1, textAlign: 'center', textDecoration: 'none' }}>&larr; Kembali</Link>
+                            <button onClick={() => router.push('/')} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
                             <button onClick={checkIC} disabled={!formData.ic || loading} className="btn btn-primary" style={{ flex: 1 }}>
                                 {loading ? 'Menyemak...' : 'Semak & Teruskan'}
                             </button>

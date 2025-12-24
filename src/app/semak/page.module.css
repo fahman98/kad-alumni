@@ -1,0 +1,102 @@
+.container {
+    min-height: 100vh;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    width: 100%;
+    max-width: 500px;
+    padding: 2.5rem;
+    background: white;
+}
+
+.header {
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+}
+
+.backLink {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.searchBox {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+}
+
+.input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.result {
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+    animation: fadeIn 0.5s ease;
+}
+
+.statusBadge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    background: #e8f0fe;
+    color: #1a73e8;
+}
+
+.statusBadge[data-status="Approved"] {
+    background: #e6f4ea;
+    color: #137333;
+}
+
+.statusBadge[data-status="Rejected"] {
+    background: #fce8e6;
+    color: #c5221f;
+}
+
+.details p {
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.tracking {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #fbbc04;
+}
+
+.trackLink {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: #1a73e8;
+    text-decoration: underline;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

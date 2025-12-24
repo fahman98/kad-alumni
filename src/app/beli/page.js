@@ -316,8 +316,13 @@ export default function BeliKad() {
                                         alt="QR Pay"
                                         style={{ maxWidth: '280px', width: '100%', borderRadius: '12px', border: '1px solid #ddd', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
                                     />
-                                    <div style={{ marginTop: '10px' }}>
-                                        <a href="/qr-pay.jpg" download="QR-Pay-UPSI.jpg" className="btn btn-outline" style={{ padding: '0.4rem 1rem', fontSize: '0.85rem' }}>
+                                    <div style={{ marginTop: '15px' }}>
+                                        <a
+                                            href="/qr-pay.jpg"
+                                            download="QR-Pay-UPSI.jpg"
+                                            className="btn btn-primary"
+                                            style={{ display: 'block', width: '100%', textDecoration: 'none', textAlign: 'center' }}
+                                        >
                                             📥 Download QR
                                         </a>
                                     </div>
@@ -331,8 +336,6 @@ export default function BeliKad() {
                                         <li>Pilih <strong>Scan QR</strong> &gt; <strong>Select from Gallery</strong>.</li>
                                     </ol>
                                 </div>
-
-                                <p style={{ fontSize: '0.9rem' }}><strong>CIMB: 8602660101 (Alumni UPSI)</strong></p>
                             </div>
                             <small className={styles.smallText} style={{ textAlign: 'center' }}>
                                 *Sila simpan resit pembayaran untuk dimuat naik di bawah.

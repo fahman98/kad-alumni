@@ -118,10 +118,16 @@ export default function BeliKad() {
             }
 
             // 2. Submit Order
+            // Combine address if delivery
+            let fullAddress = formData.address; // Fallback
+            if (formData.pickupMethod === 'delivery') {
+                fullAddress = `${formData.address1}, ${formData.postcode} ${formData.city}, ${formData.state}`;
+            }
+
             const res = await fetch('/api/order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...formData, receiptUrl })
+                body: JSON.stringify({ ...formData, address: fullAddress, receiptUrl })
             });
 
             const data = await res.json();
@@ -229,16 +235,37 @@ export default function BeliKad() {
                         </div>
 
                         {formData.pickupMethod === 'delivery' && (
-                            <div className={styles.inputGroup}>
-                                <label>Alamat Penghantaran</label>
-                                <textarea name="address" value={formData.address} onChange={handleChange} required className={styles.input} rows="3"></textarea>
+                            <>
+                                <div className={styles.inputGroup}>
+                                    <label>Alamat (No. Rumah, Jalan, Taman)</label>
+                                    <input type="text" name="address1" value={formData.address1} onChange={handleChange} required className={styles.input} placeholder="Contoh: No 12, Jalan Alumni 1, Taman Pewira" />
+                                </div>
+                                <div className={styles.row}>
+                                    <div className={styles.inputGroup}>
+                                        <label>Poskod</label>
+                                        <input type="text" name="postcode" value={formData.postcode} onChange={handleChange} required maxLength="5" className={styles.input} placeholder="35900" />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label>Bandar {lookupLoading && '...'}</label>
+                                        <input type="text" name="city" value={formData.city} onChange={handleChange} required className={styles.input} />
+                                    </div>
+                                </div>
+                                <div className={styles.inputGroup}>
+                                    <label>Negeri</label>
+                                    <input type="text" name="state" value={formData.state} onChange={handleChange} required className={styles.input} />
+                                </div>
                                 <small className={styles.smallText}>Kos penghantaran ditanggung penerima (DFOD via J&T).</small>
-                            </div>
+                            </>
                         )}
 
                         <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
                             <button onClick={() => setStep(2)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
-                            <button onClick={() => setStep(4)} disabled={formData.pickupMethod === 'delivery' && !formData.address} className="btn btn-primary" style={{ flex: 1 }}>
+                            <button
+                                onClick={() => setStep(4)}
+                                disabled={formData.pickupMethod === 'delivery' && (!formData.address1 || !formData.postcode || !formData.city || !formData.state)}
+                                className="btn btn-primary"
+                                style={{ flex: 1 }}
+                            >
                                 Seterusnya &rarr;
                             </button>
                         </div>

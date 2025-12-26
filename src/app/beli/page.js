@@ -175,14 +175,20 @@ export default function BeliKad() {
             const data = await res.json();
 
             if (res.ok) {
-                alert('Permohonan berjaya dihantar! Sila tunggu email pengesahan.');
-                window.location.href = '/';
+                setAlertType('success');
+                setAlertMessage('Permohonan berjaya dihantar! Sila tunggu email pengesahan.');
+                setShowAlert(true);
+                // Redirect happens in handleCloseAlert
             } else {
-                alert('Gagal menghantar permohonan. Sila cuba lagi.');
+                setAlertType('error');
+                setAlertMessage('Gagal menghantar permohonan. Sila cuba lagi.');
+                setShowAlert(true);
             }
         } catch (e) {
             console.error(e);
-            alert('Terdapat ralat teknikal.');
+            setAlertType('error');
+            setAlertMessage('Terdapat ralat teknikal semasa menghantar borang.');
+            setShowAlert(true);
         } finally {
             setLoading(false);
         }
@@ -198,6 +204,7 @@ export default function BeliKad() {
     // Custom Alert State
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('error'); // 'error' | 'success'
 
     // Validation State
     const [errors, setErrors] = useState({});
@@ -212,6 +219,7 @@ export default function BeliKad() {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
+            setAlertType('error');
             setAlertMessage("Sila lengkapkan maklumat yang bertanda merah.");
             setShowAlert(true);
             return;
@@ -221,6 +229,7 @@ export default function BeliKad() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(formData.email)) {
             setErrors({ email: true });
+            setAlertType('error');
             setAlertMessage("Alamat email tidak sah. Sila periksa semula.");
             setShowAlert(true);
             return;
@@ -230,17 +239,38 @@ export default function BeliKad() {
         setStep(3);
     };
 
+    const handleCloseAlert = () => {
+        setShowAlert(false);
+        if (alertType === 'success') {
+            window.location.href = '/';
+        }
+    };
+
     return (
         <div className={styles.container}>
             {/* Custom Modal */}
             {showAlert && (
-                <div className={styles.modalOverlay} onClick={() => setShowAlert(false)}>
+                <div className={styles.modalOverlay} onClick={handleCloseAlert}>
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                        <div className={styles.modalIcon} style={{ background: '#fef2f2', color: '#ef4444' }}>⚠️</div>
-                        <h3 className={styles.modalTitle}>Maklumat Tidak Lengkap</h3>
+                        <div
+                            className={styles.modalIcon}
+                            style={{
+                                background: alertType === 'success' ? '#ecfdf5' : '#fef2f2',
+                                color: alertType === 'success' ? '#10b981' : '#ef4444'
+                            }}
+                        >
+                            {alertType === 'success' ? '✅' : '⚠️'}
+                        </div>
+                        <h3 className={styles.modalTitle}>
+                            {alertType === 'success' ? 'Berjaya!' : 'Perhatian'}
+                        </h3>
                         <p className={styles.modalMessage}>{alertMessage}</p>
-                        <button className={styles.modalButton} onClick={() => setShowAlert(false)} style={{ background: '#ef4444' }}>
-                            Semak Semula
+                        <button
+                            className={styles.modalButton}
+                            onClick={handleCloseAlert}
+                            style={{ background: alertType === 'success' ? '#10b981' : '#ef4444' }}
+                        >
+                            {alertType === 'success' ? 'Kembali ke Utama' : 'Semak Semula'}
                         </button>
                     </div>
                 </div>

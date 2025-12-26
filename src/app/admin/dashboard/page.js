@@ -256,6 +256,8 @@ export default function AdminDashboard() {
                                         {order.alumniId && <div className={styles.tagId}>{order.alumniId}</div>}
                                     </td>
                                     <td>
+                                        <span className={order.pickupMethod === 'delivery' ? styles.badgeBlue : styles.badgeGray}>
+                                            {order.pickupMethod === 'delivery' ? 'POS' : 'PICKUP'}
                                         </span>
                                         {order.pickupMethod === 'delivery' && order.trackingNo && (
                                             <div className={styles.cellSub} style={{ fontSize: '0.75rem' }}>No: {order.trackingNo}</div>
@@ -271,8 +273,8 @@ export default function AdminDashboard() {
                                     </td>
                                     <td>
                                         {order.receiptUrl ? (
-                                            <button 
-                                                onClick={() => setSelectedReceipt(order.receiptUrl)} 
+                                            <button
+                                                onClick={() => setSelectedReceipt(order.receiptUrl)}
                                                 className={styles.linkButton}
                                                 style={{ color: '#2563eb', fontWeight: 500, fontSize: '0.85rem', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
                                             >
@@ -302,55 +304,55 @@ export default function AdminDashboard() {
                                     </td>
                                 </tr>
                             ))}
-                        {paginatedOrders.length === 0 && (
-                            <tr>
-                                <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>
-                                    Tiada rekod ditemui.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-        </div>
-
-                {/* Pagination Controls */ }
-    <div className={styles.pagination}>
-        <button
-            className={styles.pageBtn}
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(p => p - 1)}
-        >
-            Previous
-        </button>
-        <span style={{ color: '#64748b' }}>Page {currentPage} of {totalPages || 1}</span>
-        <button
-            className={styles.pageBtn}
-            disabled={currentPage === totalPages || totalPages === 0}
-            onClick={() => setCurrentPage(p => p + 1)}
-        >
-            Next
-        </button>
-    </div>
-            </main >
-        {/* Receipt Modal */ }
-    {
-        selectedReceipt && (
-            <div className={styles.modalOverlay} onClick={() => setSelectedReceipt(null)}>
-                <div className={styles.modalContent} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px', width: '90%', padding: '20px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-                        <h3 style={{ margin: 0 }}>Bukti Pembayaran</h3>
-                        <button onClick={() => setSelectedReceipt(null)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>&times;</button>
-                    </div>
-                    <img src={selectedReceipt} alt="Receipt" style={{ width: '100%', borderRadius: '8px', border: '1px solid #eee' }} />
-                    <div style={{ marginTop: '15px', textAlign: 'right' }}>
-                        <a href={selectedReceipt} target="_blank" download className="btn btn-primary" style={{ padding: '8px 15px', textDecoration: 'none', fontSize: '0.9rem' }}>
-                            Download Original
-                        </a>
-                    </div>
+                            {paginatedOrders.length === 0 && (
+                                <tr>
+                                    <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>
+                                        Tiada rekod ditemui.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-        )
-    }
+
+                {/* Pagination Controls */}
+                <div className={styles.pagination}>
+                    <button
+                        className={styles.pageBtn}
+                        disabled={currentPage === 1}
+                        onClick={() => setCurrentPage(p => p - 1)}
+                    >
+                        Previous
+                    </button>
+                    <span style={{ color: '#64748b' }}>Page {currentPage} of {totalPages || 1}</span>
+                    <button
+                        className={styles.pageBtn}
+                        disabled={currentPage === totalPages || totalPages === 0}
+                        onClick={() => setCurrentPage(p => p + 1)}
+                    >
+                        Next
+                    </button>
+                </div>
+            </main >
+            {/* Receipt Modal */}
+            {
+                selectedReceipt && (
+                    <div className={styles.modalOverlay} onClick={() => setSelectedReceipt(null)}>
+                        <div className={styles.modalContent} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px', width: '90%', padding: '20px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                                <h3 style={{ margin: 0 }}>Bukti Pembayaran</h3>
+                                <button onClick={() => setSelectedReceipt(null)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>&times;</button>
+                            </div>
+                            <img src={selectedReceipt} alt="Receipt" style={{ width: '100%', borderRadius: '8px', border: '1px solid #eee' }} />
+                            <div style={{ marginTop: '15px', textAlign: 'right' }}>
+                                <a href={selectedReceipt} target="_blank" download className="btn btn-primary" style={{ padding: '8px 15px', textDecoration: 'none', fontSize: '0.9rem' }}>
+                                    Download Original
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
         </div >
     );
 }

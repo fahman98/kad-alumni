@@ -64,13 +64,24 @@ export default function OrdersPage() {
                     let loadingMsg = "Updating...";
 
                     if (newStatus === 'Approved') {
-                        // Simple ID Generation: KM (Kad Matrik/Member) - Year - 4 Random Digits
-                        // Ideally checking for duplicates, but for MVP random is ok.
-                        const currentYear = new Date().getFullYear();
-                        const randomSeq = Math.floor(1000 + Math.random() * 9000); // 1000 - 9999
-                        const generatedCardId = `KM${currentYear}${randomSeq}`;
+                        // ID Generation: 1922 + GradYear + Running No (Start 0101)
+                        const gradYear = orderData.gradYear || new Date().getFullYear(); // Fallback to current year if missing
+                        const prefix = `1922${gradYear}`;
 
-                        updates.generatedId = generatedCardId; // Save to DB
+                        // Find all existing IDs for this gradYear
+                        const existingIds = orders
+                            .filter(o => o.generatedId && o.generatedId.startsWith(prefix))
+                            .map(o => parseInt(o.generatedId.replace(prefix, ''), 10))
+                            .filter(num => !isNaN(num));
+
+                        let nextSeq = 101; // Default start
+                        if (existingIds.length > 0) {
+                            nextSeq = Math.max(...existingIds) + 1;
+                        }
+
+                        const generatedCardId = `${prefix}${nextSeq.toString().padStart(4, '0')}`;
+
+                        updates.generatedId = generatedCardId;
 
                         // Trigger Email Notification (Non-blocking usually, but lets await to ensure)
                         const orderData = orders.find(o => o.id === id);

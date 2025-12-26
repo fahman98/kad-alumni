@@ -156,7 +156,96 @@
         flex-direction: column;
     }
 
-    .card {
-        padding: 2rem;
+
+    /* Timeline */
+    .timeline {
+        margin: 2rem 0;
+        position: relative;
+        padding-left: 10px;
     }
-}
+
+    .timelineItem {
+        display: flex;
+        gap: 15px;
+        padding-bottom: 2rem;
+        position: relative;
+    }
+
+    .timelineItem:last-child {
+        padding-bottom: 0;
+    }
+
+    .timelineMarker {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 24px;
+        position: relative;
+    }
+
+    .timelineDot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #e2e8f0;
+        z-index: 2;
+        margin-top: 4px;
+        border: 2px solid white;
+        box-shadow: 0 0 0 2px #e2e8f0;
+        transition: all 0.3s ease;
+    }
+
+    .timelineLine {
+        position: absolute;
+        top: 18px;
+        bottom: -18px;
+        width: 2px;
+        background: #e2e8f0;
+        z-index: 1;
+    }
+
+    .timelineItem:last-child .timelineLine {
+        display: none;
+    }
+
+    .timelineContent {
+        flex: 1;
+    }
+
+    .timelineTitle {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #94a3b8;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .timelineDesc {
+        margin: 4px 0 0 0;
+        font-size: 0.8rem;
+        color: #64748b;
+    }
+
+    /* Active State */
+    .active .timelineDot {
+        background: #3b82f6;
+        box-shadow: 0 0 0 4px #dbeafe;
+    }
+
+    .active .timelineTitle {
+        color: #1e293b;
+    }
+
+    /* Completed State */
+    .completed .timelineDot {
+        background: #10b981;
+        box-shadow: 0 0 0 0;
+    }
+
+    .completed .timelineLine {
+        background: #10b981;
+    }
+
+    .completed .timelineTitle {
+        color: #059669;
+    }

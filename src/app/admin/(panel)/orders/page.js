@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import styles from './page.module.css';
+import { sendEmail } from '@/lib/sendEmail';
+import { getApprovalEmail, getReadyEmail, getShippedEmail } from '@/lib/emailTemplates';
 
 export default function OrdersPage() {
     const [orders, setOrders] = useState([]);
@@ -55,17 +57,18 @@ export default function OrdersPage() {
             isOpen: true,
             message: `Tukar status kepada ${newStatus}?`,
             subMessage: 'Adakah anda pasti mahu mengubah status tempahan ini?',
+            inputs: null, // content for inputs
             type: 'info',
-            onConfirm: async () => {
+            onConfirm: async (data) => { // data param for inputs
                 try {
                     const orderRef = doc(db, "orders", id);
                     const updates = { status: newStatus };
 
                     // If Approving, Generate Card ID if not exists
                     let loadingMsg = "Updating...";
+                    const orderData = orders.find(o => o.id === id);
 
                     if (newStatus === 'Approved') {
-                        const orderData = orders.find(o => o.id === id);
 
                         // ID Generation: 1922 + GradYear + Running No (Start 0101)
                         const gradYear = orderData?.gradYear || new Date().getFullYear(); // Fallback to current year if missing
@@ -91,17 +94,35 @@ export default function OrdersPage() {
                             // Format ID for display (e.g. 1922 2023 0101)
                             const formattedCardId = generatedCardId.replace(/(\d{4})(\d{4})(\d{4})/, '$1 $2 $3');
 
-                            fetch('/api/notify/approve', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    name: orderData.name,
-                                    email: orderData.email,
-                                    ic: orderData.ic,
-                                    cardId: formattedCardId,
-                                    date: new Date().toLocaleDateString('ms-MY')
-                                })
-                            }).catch(err => console.error("Email API failed", err));
+                            // SEND APPROVAL EMAIL
+                            const emailContent = getApprovalEmail(orderData.name, formattedCardId, orderData.receiptUrl);
+                            sendEmail(orderData.email, "Permohonan Kad Alumni Lulus ✅", emailContent);
+                        }
+                    }
+
+                    // Handling READY (Pickup)
+                    if (newStatus === 'Ready' && orderData?.pickupMethod !== 'delivery') {
+                        // SEND READY EMAIL
+                        // TODO: Replace # with actual booking page link
+                        const bookingLink = `${window.location.origin}/booking`;
+                        const emailContent = getReadyEmail(orderData.name, bookingLink);
+                        sendEmail(orderData.email, "Kad Alumni Anda Telah Siap! 🎓", emailContent);
+                    }
+
+                    // Handling SHIPPED (Delivery)
+                    if (newStatus === 'Shipped' && orderData?.pickupMethod === 'delivery') {
+                        // Save Tracking Info
+                        if (data && data.trackingNo) {
+                            updates.details = {
+                                ...orderData.details,
+                                trackingNo: data.trackingNo,
+                                courierFee: data.courierFee || '0'
+                            };
+
+                            // SEND SHIPPED EMAIL
+                            const trackingLink = `https://www.google.com/search?q=${data.trackingNo}`; // Generic google search or specific courier
+                            const emailContent = getShippedEmail(orderData.name, data.trackingNo, data.courierFee, trackingLink);
+                            sendEmail(orderData.email, "Kad Alumni Anda Telah Dipos! 🚚", emailContent);
                         }
                     }
 
@@ -499,6 +520,20 @@ export default function OrdersPage() {
                             </div>
                             <h3 style={{ margin: '0 0 8px 0', color: '#111827', fontSize: '1.125rem' }}>{confirmation.message}</h3>
                             <p style={{ margin: 0, color: '#6b7280', fontSize: '0.95rem', lineHeight: '1.5' }}>{confirmation.subMessage}</p>
+
+                            {/* Input Fields for Shipping */}
+                            {confirmation.inputs && (
+                                <div style={{ marginTop: '15px', textAlign: 'left' }}>
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', marginBottom: '4px' }}>Tracking No</label>
+                                        <input type="text" id="trackingNo" className={styles.searchInput} style={{ width: '100%' }} placeholder="Contoh: JNT123456" />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', marginBottom: '4px' }}>Cas DFOD (RM)</label>
+                                        <input type="number" id="courierFee" className={styles.searchInput} style={{ width: '100%' }} placeholder="Contoh: 12.00" />
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', padding: '0 24px 8px 24px' }}>
                             {confirmation.type !== 'success' && (
@@ -513,7 +548,16 @@ export default function OrdersPage() {
                                 </button>
                             )}
                             <button
-                                onClick={confirmation.onConfirm}
+                                onClick={() => {
+                                    if (confirmation.inputs) {
+                                        const tNo = document.getElementById('trackingNo').value;
+                                        const fee = document.getElementById('courierFee').value;
+                                        if (!tNo) return alert("Sila masukkan Tracking No.");
+                                        confirmation.onConfirm({ trackingNo: tNo, courierFee: fee });
+                                    } else {
+                                        confirmation.onConfirm();
+                                    }
+                                }}
                                 style={{
                                     padding: '8px 16px', borderRadius: '8px', border: 'none',
                                     background: confirmation.type === 'danger' ? '#dc2626' : confirmation.type === 'success' ? '#16a34a' : '#2563eb',

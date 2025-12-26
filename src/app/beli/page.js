@@ -61,8 +61,20 @@ export default function BeliKad() {
         }
     };
 
+    const [previewUrl, setPreviewUrl] = useState(null);
+
     const handleFileChange = (e) => {
-        setFormData(prev => ({ ...prev, receipt: e.target.files[0] }));
+        const file = e.target.files[0];
+        if (file) {
+            setFormData(prev => ({ ...prev, receipt: file }));
+
+            // Create preview
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrl(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     /* 
@@ -344,6 +356,22 @@ export default function BeliKad() {
                         <div className={styles.inputGroup}>
                             <label>Muat Naik Resit</label>
                             <input type="file" onChange={handleFileChange} required accept="image/*" className={styles.input} />
+                            {previewUrl && (
+                                <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                                    <p style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '5px' }}>Preview Resit:</p>
+                                    <img
+                                        src={previewUrl}
+                                        alt="Preview Resit"
+                                        style={{
+                                            maxWidth: '100%',
+                                            maxHeight: '300px',
+                                            borderRadius: '8px',
+                                            border: '1px solid #cbd5e1',
+                                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                        }}
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>

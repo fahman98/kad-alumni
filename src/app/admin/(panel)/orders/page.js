@@ -94,12 +94,26 @@ export default function OrdersPage() {
                     setOrders(prev => prev.map(o =>
                         o.id === id ? { ...o, ...updates } : o
                     ));
-                    closeConfirmation();
-
-                    if (newStatus === 'Approved') alert("Permohonan diluluskan & Email telah dihantar.");
+                    if (newStatus === 'Approved') {
+                        setConfirmation({
+                            isOpen: true,
+                            message: 'Permohonan Diluluskan',
+                            subMessage: 'Email notifikasi dan butiran kad telah dihantar kepada pemohon.',
+                            type: 'success',
+                            onConfirm: () => closeConfirmation() // Just close
+                        });
+                    } else {
+                        closeConfirmation();
+                    }
 
                 } catch (error) {
-                    alert("Error updating status: " + error.message);
+                    setConfirmation({
+                        isOpen: true,
+                        message: 'Ralat',
+                        subMessage: error.message,
+                        type: 'danger',
+                        onConfirm: () => closeConfirmation()
+                    });
                 }
             }
         });
@@ -340,34 +354,36 @@ export default function OrdersPage() {
                         <div style={{ padding: '24px 24px 12px 24px' }}>
                             <div style={{
                                 width: '48px', height: '48px', borderRadius: '50%', margin: '0 auto 16px auto',
-                                background: confirmation.type === 'danger' ? '#fee2e2' : '#e0f2fe',
-                                color: confirmation.type === 'danger' ? '#dc2626' : '#0284c7',
+                                background: confirmation.type === 'danger' ? '#fee2e2' : confirmation.type === 'success' ? '#dcfce7' : '#e0f2fe',
+                                color: confirmation.type === 'danger' ? '#dc2626' : confirmation.type === 'success' ? '#16a34a' : '#0284c7',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'
                             }}>
-                                {confirmation.type === 'danger' ? '⚠️' : 'ℹ️'}
+                                {confirmation.type === 'danger' ? '⚠️' : confirmation.type === 'success' ? '✅' : 'ℹ️'}
                             </div>
                             <h3 style={{ margin: '0 0 8px 0', color: '#111827', fontSize: '1.125rem' }}>{confirmation.message}</h3>
                             <p style={{ margin: 0, color: '#6b7280', fontSize: '0.95rem', lineHeight: '1.5' }}>{confirmation.subMessage}</p>
                         </div>
                         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', padding: '0 24px 8px 24px' }}>
-                            <button
-                                onClick={closeConfirmation}
-                                style={{
-                                    padding: '8px 16px', borderRadius: '8px', border: '1px solid #d1d5db', background: 'white',
-                                    color: '#374151', fontWeight: '500', cursor: 'pointer', flex: '1'
-                                }}
-                            >
-                                Batal
-                            </button>
+                            {confirmation.type !== 'success' && (
+                                <button
+                                    onClick={closeConfirmation}
+                                    style={{
+                                        padding: '8px 16px', borderRadius: '8px', border: '1px solid #d1d5db', background: 'white',
+                                        color: '#374151', fontWeight: '500', cursor: 'pointer', flex: '1'
+                                    }}
+                                >
+                                    Batal
+                                </button>
+                            )}
                             <button
                                 onClick={confirmation.onConfirm}
                                 style={{
                                     padding: '8px 16px', borderRadius: '8px', border: 'none',
-                                    background: confirmation.type === 'danger' ? '#dc2626' : '#2563eb',
+                                    background: confirmation.type === 'danger' ? '#dc2626' : confirmation.type === 'success' ? '#16a34a' : '#2563eb',
                                     color: 'white', fontWeight: '500', cursor: 'pointer', flex: '1'
                                 }}
                             >
-                                {confirmation.type === 'danger' ? 'Padam' : 'Ya, Pasti'}
+                                {confirmation.type === 'danger' ? 'Padam' : confirmation.type === 'success' ? 'Selesai' : 'Ya, Pasti'}
                             </button>
                         </div>
                     </div>

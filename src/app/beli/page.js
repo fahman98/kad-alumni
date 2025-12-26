@@ -195,17 +195,23 @@ export default function BeliKad() {
         { id: 4, label: 'Bayaran' }
     ];
 
+    // Custom Alert State
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
     const handleNextStep2 = () => {
         // Basic Empty Check
         if (!formData.name || !formData.phone || !formData.gradYear || !formData.email) {
-            alert("Sila lengkapkan semua maklumat bertanda *");
+            setAlertMessage("Sila lengkapkan semua maklumat bertanda *");
+            setShowAlert(true);
             return;
         }
 
         // Email Regex Check
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(formData.email)) {
-            alert("Sila masukkan alamat email yang sah (contoh: nama@gmail.com)");
+            setAlertMessage("Sila masukkan alamat email yang sah (contoh: nama@gmail.com)");
+            setShowAlert(true);
             return;
         }
 
@@ -214,6 +220,20 @@ export default function BeliKad() {
 
     return (
         <div className={styles.container}>
+            {/* Custom Modal */}
+            {showAlert && (
+                <div className={styles.modalOverlay} onClick={() => setShowAlert(false)}>
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                        <div className={styles.modalIcon}>⚠️</div>
+                        <h3 className={styles.modalTitle}>Perhatian</h3>
+                        <p className={styles.modalMessage}>{alertMessage}</p>
+                        <button className={styles.modalButton} onClick={() => setShowAlert(false)}>
+                            Faham
+                        </button>
+                    </div>
+                </div>
+            )}
+
             <div className={`glass ${styles.formCard}`}>
                 <div className={styles.header}>
                     <h2>Permohonan Kad Alumni</h2>

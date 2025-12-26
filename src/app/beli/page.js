@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 import Link from 'next/link';
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function BeliKad() {
     const router = useRouter();
@@ -19,8 +20,11 @@ export default function BeliKad() {
         postcode: '',
         city: '',
         state: '',
+        city: '',
+        state: '',
         receipt: null
     });
+    const [captchaToken, setCaptchaToken] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [lookupLoading, setLookupLoading] = useState(false);
@@ -198,6 +202,14 @@ export default function BeliKad() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!captchaToken) {
+            setAlertType('error');
+            setAlertMessage('Sila sahkan bahawa anda bukan robot (reCAPTCHA).');
+            setShowAlert(true);
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -573,6 +585,14 @@ export default function BeliKad() {
                                     />
                                 </div>
                             )}
+                        </div>
+
+                        {/* ReCAPTCHA */}
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                            <ReCAPTCHA
+                                sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // Google Test Key (Safe for Dev)
+                                onChange={(token) => setCaptchaToken(token)}
+                            />
                         </div>
 
                         <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>

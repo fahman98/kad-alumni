@@ -184,7 +184,9 @@ export default function OrdersPage() {
                                     <div className={styles.cellSub}>{order.phone}</div>
                                 </td>
                                 <td>
-                                    <div className={styles.badgeBlue}>{order.cardType}</div>
+                                    {order.cardType && (
+                                        <div className={styles.badgeBlue}>{order.cardType}</div>
+                                    )}
                                     <div className={styles.tagId}>{order.matricNo || order.ic}</div>
                                 </td>
                                 <td>

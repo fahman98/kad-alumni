@@ -117,11 +117,11 @@ export default function SemakStatus() {
                         {/* Current Status Detail Box */}
                         <div className={styles.statusDetailBox}>
                             <h4 className={styles.statusDetailTitle}>
-                                {result.status === 'Pending' && 'Permohonan Diterima'}
-                                {result.status === 'Approved' && 'Permohonan Diluluskan'}
-                                {result.status === 'Printing' && 'Dalam Proses Cetakan'}
-                                {['Ready', 'Shipped'].includes(result.status) && 'Sedia untuk Diambil/Dipos'}
-                                {result.status === 'Rejected' && 'Permohonan Ditolak'}
+                                {result.status === 'Pending' && <><span>📝</span> Permohonan Diterima</>}
+                                {result.status === 'Approved' && <><span>✅</span> Permohonan Diluluskan</>}
+                                {result.status === 'Printing' && <><span>🖨️</span> Dalam Proses Cetakan</>}
+                                {['Ready', 'Shipped'].includes(result.status) && <><span>📦</span> Sedia untuk Diambil/Dipos</>}
+                                {result.status === 'Rejected' && <><span>❌</span> Permohonan Ditolak</>}
                             </h4>
                             <p className={styles.statusDetailDesc}>
                                 {result.status === 'Pending' && 'Kami telah menerima tempahan anda. Sila tunggu kelulusan admin (1-3 hari bekerja).'}

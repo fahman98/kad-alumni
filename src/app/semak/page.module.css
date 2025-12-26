@@ -92,14 +92,17 @@
 }
 
 
+
 /* Horizontal Stepper */
 .progressContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 2rem auto 3rem;
+    margin: 2.5rem auto 3.5rem;
+    /* Increased spacing */
     position: relative;
     max-width: 100%;
+    padding: 0 10px;
 }
 
 .progressStep {
@@ -112,82 +115,85 @@
 }
 
 .stepCircle {
-    width: 36px;
-    height: 36px;
-    background: #e2e8f0;
-    color: #64748b;
+    width: 40px;
+    /* Slightly larger */
+    height: 40px;
+    background: #f1f5f9;
+    color: #94a3b8;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
     font-size: 1rem;
-    margin-bottom: 10px;
-    transition: all 0.3s;
-    border: 3px solid white;
-    box-shadow: 0 0 0 2px #e2e8f0;
+    margin-bottom: 12px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 4px solid white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    /* Drop shadow */
 }
 
 .stepLabel {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: #94a3b8;
     font-weight: 600;
     text-align: center;
-    line-height: 1.2;
-    max-width: 80px;
-}
-
-.stepDate {
-    font-size: 0.7rem;
-    color: #94a3b8;
-    margin-top: 4px;
-    font-weight: 400;
+    line-height: 1.3;
+    max-width: 90px;
+    transition: color 0.3s ease;
 }
 
 /* Active / Completed State */
 .activeStep .stepCircle {
-    background: #2563eb;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    /* Gradient Blue */
     color: white;
-    box-shadow: 0 0 0 4px #dbeafe;
+    box-shadow: 0 0 0 4px #dbeafe, 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+    /* Glow + Shadow */
+    transform: scale(1.1);
+    /* Pop effect */
+    animation: pulse 2s infinite;
 }
 
 .activeStep .stepLabel {
     color: #1e293b;
+    font-weight: 700;
+}
+
+.completedStep .stepCircle {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    /* Gradient Green */
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+}
+
+.completedStep .stepLabel {
+    color: #059669;
 }
 
 /* Line Connector */
 .stepLine {
     position: absolute;
-    top: 18px;
+    top: 20px;
     left: 50%;
     width: 100%;
-    height: 3px;
+    height: 4px;
+    /* Thicker line */
     background: #e2e8f0;
     z-index: -1;
     transform: translateY(-50%);
+    border-radius: 2px;
 }
 
 .activeStep .stepLine {
-    background: #bfdbfe;
-    /* or a gradient if we want to be fancy */
-    background: linear-gradient(to right, #2563eb 50%, #e2e8f0 50%);
+    background: linear-gradient(to right, #10b981 50%, #e2e8f0 50%);
     background-size: 200% 100%;
     background-position: 100% 0;
-    transition: background-position 0.4s ease;
 }
 
 .completedStep .stepLine {
-    background: #2563eb;
-}
-
-.completedStep .stepCircle {
-    background: #2563eb;
-    color: white;
-    box-shadow: none;
-}
-
-.completedStep .stepLabel {
-    color: #2563eb;
+    background: #10b981;
+    /* Green line for completed path */
 }
 
 /* Last step line hidden */
@@ -195,32 +201,74 @@
     display: none;
 }
 
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+}
+
 /* Specific styling for the detailed info box below stepper */
 .statusDetailBox {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
+    background: linear-gradient(to right, #eff6ff, #f8fafc);
+    /* Subtle gradient */
+    border: 1px solid #bfdbfe;
+    border-left: 5px solid #3b82f6;
+    /* Accent border */
+    border-radius: 8px;
+    /* Sharper corners */
     padding: 1.5rem;
     text-align: left;
     margin-top: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .statusDetailTitle {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #1e40af;
+    /* Darker blue */
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .statusDetailDesc {
     color: #475569;
     font-size: 0.95rem;
-    line-height: 1.5;
+    line-height: 1.6;
+    margin: 0;
 }
 
 /* Mobile */
 @media (max-width: 480px) {
     .searchBox {
         flex-direction: column;
+    }
+
+    .stepLabel {
+        font-size: 0.7rem;
+        /* Smaller text on mobile */
+    }
+
+    .stepCircle {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+    }
+
+    .stepLine {
+        top: 16px;
     }
 }

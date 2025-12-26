@@ -335,24 +335,28 @@ export default function AdminDashboard() {
                 </div>
             </main >
             {/* Receipt Modal */}
-            {
-                selectedReceipt && (
-                    <div className={styles.modalOverlay} onClick={() => setSelectedReceipt(null)}>
-                        <div className={styles.modalContent} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px', width: '90%', padding: '20px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-                                <h3 style={{ margin: 0 }}>Bukti Pembayaran</h3>
-                                <button onClick={() => setSelectedReceipt(null)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>&times;</button>
-                            </div>
-                            <img src={selectedReceipt} alt="Receipt" style={{ width: '100%', borderRadius: '8px', border: '1px solid #eee' }} />
-                            <div style={{ marginTop: '15px', textAlign: 'right' }}>
-                                <a href={selectedReceipt} target="_blank" download className="btn btn-primary" style={{ padding: '8px 15px', textDecoration: 'none', fontSize: '0.9rem' }}>
-                                    Download Original
-                                </a>
-                            </div>
+            {selectedReceipt && (
+                <div className={styles.modalOverlay} onClick={() => setSelectedReceipt(null)}>
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px', width: '90%', padding: '20px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                            <h3 style={{ margin: 0 }}>Bukti Pembayaran</h3>
+                            <button onClick={() => setSelectedReceipt(null)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>&times;</button>
+                        </div>
+                        <img
+                            src={formatGoogleDriveUrl(selectedReceipt)}
+                            alt="Receipt"
+                            style={{ width: '100%', borderRadius: '8px', border: '1px solid #eee', minHeight: '200px', objectFit: 'contain', background: '#f8fafc' }}
+                            onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x300?text=Image+Load+Error'; }}
+                        />
+                        <div style={{ marginTop: '15px', textAlign: 'right' }}>
+                            <a href={selectedReceipt} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: '8px 15px', textDecoration: 'none', fontSize: '0.9rem', display: 'inline-block', background: '#2563eb', color: 'white', borderRadius: '6px' }}>
+                                Download Original
+                            </a>
                         </div>
                     </div>
-                )
-            }
+                </div>
+            )}
         </div >
     );
 }
+```

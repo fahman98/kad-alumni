@@ -24,6 +24,31 @@ export default function AdminDashboard() {
     // Stats
     const [stats, setStats] = useState({ total: 0, pending: 0, revenue: 0, completed: 0 });
 
+    // Helper to process Google Drive URLs for image tag
+    const formatGoogleDriveUrl = (url) => {
+        if (!url) return '';
+        // Check if it's a google drive url
+        if (url.includes('drive.google.com')) {
+            // Try to extract ID from typical patterns
+            // Pattern 1: /file/d/ID/view
+            // Pattern 2: id=ID
+            let id = '';
+            const parts = url.split('/');
+            const dIndex = parts.indexOf('d');
+            if (dIndex !== -1 && parts.length > dIndex + 1) {
+                id = parts[dIndex + 1];
+            } else {
+                const match = url.match(/id=([^&]+)/);
+                if (match) id = match[1];
+            }
+
+            if (id) {
+                return `https://drive.google.com/uc?export=view&id=${id}`;
+            }
+        }
+        return url;
+    };
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (!user) {

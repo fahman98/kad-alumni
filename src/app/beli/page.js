@@ -195,6 +195,10 @@ export default function BeliKad() {
         { id: 4, label: 'Bayaran' }
     ];
 
+    // Custom Alert State
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
     // Validation State
     const [errors, setErrors] = useState({});
 

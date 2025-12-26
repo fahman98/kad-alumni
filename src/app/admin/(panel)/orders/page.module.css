@@ -85,7 +85,8 @@
 .table th {
     background: #f9fafb;
     padding: 1rem 1.5rem;
-    text-align: left;
+    text-align: center;
+    /* Changed to center */
     font-weight: 600;
     color: #6b7280;
     font-size: 0.75rem;
@@ -100,6 +101,14 @@
     vertical-align: middle;
     color: #374151;
     font-size: 0.95rem;
+    text-align: center;
+    /* Changed to center */
+}
+
+/* First Column Left Aligned */
+.table th:first-child,
+.table td:first-child {
+    text-align: left;
 }
 
 .table tr:last-child td {
@@ -215,6 +224,8 @@
 .actions {
     display: flex;
     gap: 6px;
+    justify-content: center;
+    /* Center buttons */
 }
 
 .btnAction {

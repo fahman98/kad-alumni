@@ -3,24 +3,31 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../../lib/firebase';
 import styles from './page.module.css';
 
 export default function AdminLogin() {
     const router = useRouter();
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        // Simple hardcoded check for MVP
-        // In production, use Firebase Auth or NextAuth
-        if (username === 'admin' && password === 'upsi2024') {
-            // Set a simple flag in localStorage
+        setError('');
+        setLoading(true);
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
             localStorage.setItem('isAdmin', 'true');
             router.push('/admin/dashboard');
-        } else {
-            setError('Mengarut! Username atau password salah.');
+        } catch (err) {
+            console.error(err);
+            setError('Login Gagal. Sila semak email & password.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -34,12 +41,13 @@ export default function AdminLogin() {
 
                 <form onSubmit={handleLogin} className={styles.form}>
                     <div className={styles.inputGroup}>
-                        <label>Username</label>
+                        <label>Email</label>
                         <input
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Masuk username"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="admin@upsi.edu.my"
+                            required
                         />
                     </div>
 
@@ -50,6 +58,7 @@ export default function AdminLogin() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Masuk password"
+                            required
                         />
                     </div>
 

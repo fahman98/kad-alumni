@@ -80,66 +80,56 @@ export default function SemakStatus() {
                 {result && (
                     <div className={styles.result}>
                         {/* Timeline */}
-                        <div className={styles.timeline}>
+                        {/* Horizontal Stepper */}
+                        <div className={styles.progressContainer}>
                             {['Pending', 'Approved', 'Printing', 'Ready'].map((stepStatus, index) => {
-                                // Define Labels
                                 const labels = {
-                                    'Pending': 'Permohonan Diterima',
-                                    'Approved': 'Permohonan Lulus',
-                                    'Printing': 'Cetakan Kad',
-                                    'Ready': result.status === 'Shipped' ? 'Dihantar (Pos)' : 'Sedia (Pickup/Pos)'
+                                    'Pending': 'Permohonan',
+                                    'Approved': 'Kelulusan',
+                                    'Printing': 'Cetakan',
+                                    'Ready': 'Serahan'
                                 };
 
-                                const descs = {
-                                    'Pending': 'Kami telah menerima tempahan anda.',
-                                    'Approved': 'Tempahan disahkan & ID dijana.',
-                                    'Printing': 'Kad sedang dalam proses cetakan.',
-                                    'Ready': result.status === 'Shipped' ? 'Kad telah dipos kepada anda.' : 'Kad boleh diambil atau dipos.'
-                                };
-
-                                // Determine State
-                                let state = ''; // default, active, completed
+                                // Determine State Logic
+                                // 0: Pending, 1: Approved, 2: Printing, 3: Ready/Shipped
                                 const currentStatus = result.status || 'Pending';
-
-                                const statusOrder = ['Pending', 'Approved', 'Printing', 'Ready', 'Shipped'];
-                                const currentIndex = statusOrder.indexOf(currentStatus === 'Shipped' ? 'Ready' : currentStatus); // Treat Shipped as Ready level for timeline or higher?
-                                // Actually, let's map strict levels.
-                                // 0: Pending
-                                // 1: Approved
-                                // 2: Printing
-                                // 3: Ready / Shipped
-
-                                let myLevel = index;
-                                let currentLevel = -1;
-                                if (currentStatus === 'Pending') currentLevel = 0;
-                                else if (currentStatus === 'Approved') currentLevel = 1;
+                                let currentLevel = 0;
+                                if (currentStatus === 'Approved') currentLevel = 1;
                                 else if (currentStatus === 'Printing') currentLevel = 2;
-                                else if (currentStatus === 'Ready' || currentStatus === 'Shipped') currentLevel = 3;
+                                else if (['Ready', 'Shipped'].includes(currentStatus)) currentLevel = 3;
 
-                                if (myLevel < currentLevel) state = styles.completed;
-                                else if (myLevel === currentLevel) state = styles.active;
-                                else state = '';
-
-                                // Rejected Case
-                                if (result.status === 'Rejected') {
-                                    if (index === 0) state = styles.completed;
-                                    else return null; // Don't show future steps if rejected? Or show Rejected step?
-                                    // For simplicity, if rejected, just show a big Red alert instead of timeline, handled below.
-                                }
+                                let stepClass = styles.progressStep;
+                                if (index < currentLevel) stepClass += ` ${styles.completedStep}`;
+                                else if (index === currentLevel) stepClass += ` ${styles.activeStep}`;
 
                                 return (
-                                    <div key={stepStatus} className={`${styles.timelineItem} ${state}`}>
-                                        <div className={styles.timelineMarker}>
-                                            <div className={styles.timelineDot}></div>
-                                            <div className={styles.timelineLine}></div>
+                                    <div key={stepStatus} className={stepClass}>
+                                        <div className={styles.stepCircle}>
+                                            {index < currentLevel ? '✓' : index + 1}
                                         </div>
-                                        <div className={styles.timelineContent}>
-                                            <h4 className={styles.timelineTitle}>{labels[stepStatus]}</h4>
-                                            {state && <p className={styles.timelineDesc}>{descs[stepStatus]}</p>}
-                                        </div>
+                                        <span className={styles.stepLabel}>{labels[stepStatus]}</span>
+                                        <div className={styles.stepLine}></div>
                                     </div>
                                 );
                             })}
+                        </div>
+
+                        {/* Current Status Detail Box */}
+                        <div className={styles.statusDetailBox}>
+                            <h4 className={styles.statusDetailTitle}>
+                                {result.status === 'Pending' && 'Permohonan Diterima'}
+                                {result.status === 'Approved' && 'Permohonan Diluluskan'}
+                                {result.status === 'Printing' && 'Dalam Proses Cetakan'}
+                                {['Ready', 'Shipped'].includes(result.status) && 'Sedia untuk Diambil/Dipos'}
+                                {result.status === 'Rejected' && 'Permohonan Ditolak'}
+                            </h4>
+                            <p className={styles.statusDetailDesc}>
+                                {result.status === 'Pending' && 'Kami telah menerima tempahan anda. Sila tunggu kelulusan admin (1-3 hari bekerja).'}
+                                {result.status === 'Approved' && 'Tempahan anda telah disahkan dan ID Alumni telah dijana.'}
+                                {result.status === 'Printing' && 'Kad anda sedang dicetak. Proses ini mengambil masa 3-5 hari bekerja.'}
+                                {['Ready', 'Shipped'].includes(result.status) && (result.status === 'Shipped' || result.details?.trackingNo ? 'Kad anda telah diserahkan kepada kurier.' : 'Kad anda telah siap dan sedia diambil.')}
+                                {result.status === 'Rejected' && <span style={{ color: 'red' }}>Maaf, permohonan anda tidak lengkap atau ditolak. Sila hubungi admin.</span>}
+                            </p>
                         </div>
 
                         {result.status === 'Rejected' && (

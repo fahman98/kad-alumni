@@ -91,63 +91,131 @@
     }
 }
 
-.statusBadge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
+
+/* Horizontal Stepper */
+.progressContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem auto 3rem;
+    position: relative;
+    max-width: 100%;
 }
 
-.statusBadge[data-status="Approved"] {
-    background: #dcfce7;
-    color: #166534;
+.progressStep {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    flex: 1;
 }
 
-.statusBadge[data-status="Pending"] {
-    background: #fef9c3;
-    color: #854d0e;
-}
-
-.statusBadge[data-status="Rejected"] {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.statusBadge[data-status="Shipped"] {
-    background: #dbeafe;
-    color: #1e40af;
-}
-
-.details p {
-    margin-bottom: 0.5rem;
-    color: #334155;
-    font-size: 0.95rem;
-}
-
-.tracking {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #cbd5e1;
-}
-
-.tracking code {
+.stepCircle {
+    width: 36px;
+    height: 36px;
     background: #e2e8f0;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-weight: 600;
-    color: #0f172a;
+    color: #64748b;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px #e2e8f0;
 }
 
-.trackLink {
-    display: inline-block;
-    margin-top: 8px;
-    color: #2563eb;
+.stepLabel {
+    font-size: 0.8rem;
+    color: #94a3b8;
     font-weight: 600;
-    text-decoration: underline;
-    font-size: 0.9rem;
+    text-align: center;
+    line-height: 1.2;
+    max-width: 80px;
+}
+
+.stepDate {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    margin-top: 4px;
+    font-weight: 400;
+}
+
+/* Active / Completed State */
+.activeStep .stepCircle {
+    background: #2563eb;
+    color: white;
+    box-shadow: 0 0 0 4px #dbeafe;
+}
+
+.activeStep .stepLabel {
+    color: #1e293b;
+}
+
+/* Line Connector */
+.stepLine {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    width: 100%;
+    height: 3px;
+    background: #e2e8f0;
+    z-index: -1;
+    transform: translateY(-50%);
+}
+
+.activeStep .stepLine {
+    background: #bfdbfe;
+    /* or a gradient if we want to be fancy */
+    background: linear-gradient(to right, #2563eb 50%, #e2e8f0 50%);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    transition: background-position 0.4s ease;
+}
+
+.completedStep .stepLine {
+    background: #2563eb;
+}
+
+.completedStep .stepCircle {
+    background: #2563eb;
+    color: white;
+    box-shadow: none;
+}
+
+.completedStep .stepLabel {
+    color: #2563eb;
+}
+
+/* Last step line hidden */
+.progressStep:last-child .stepLine {
+    display: none;
+}
+
+/* Specific styling for the detailed info box below stepper */
+.statusDetailBox {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: left;
+    margin-top: 1rem;
+}
+
+.statusDetailTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.statusDetailDesc {
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
 /* Mobile */
@@ -155,97 +223,4 @@
     .searchBox {
         flex-direction: column;
     }
-
-
-    /* Timeline */
-    .timeline {
-        margin: 2rem 0;
-        position: relative;
-        padding-left: 10px;
-    }
-
-    .timelineItem {
-        display: flex;
-        gap: 15px;
-        padding-bottom: 2rem;
-        position: relative;
-    }
-
-    .timelineItem:last-child {
-        padding-bottom: 0;
-    }
-
-    .timelineMarker {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 24px;
-        position: relative;
-    }
-
-    .timelineDot {
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: #e2e8f0;
-        z-index: 2;
-        margin-top: 4px;
-        border: 2px solid white;
-        box-shadow: 0 0 0 2px #e2e8f0;
-        transition: all 0.3s ease;
-    }
-
-    .timelineLine {
-        position: absolute;
-        top: 18px;
-        bottom: -18px;
-        width: 2px;
-        background: #e2e8f0;
-        z-index: 1;
-    }
-
-    .timelineItem:last-child .timelineLine {
-        display: none;
-    }
-
-    .timelineContent {
-        flex: 1;
-    }
-
-    .timelineTitle {
-        font-weight: 600;
-        font-size: 0.95rem;
-        color: #94a3b8;
-        margin: 0;
-        line-height: 1.2;
-    }
-
-    .timelineDesc {
-        margin: 4px 0 0 0;
-        font-size: 0.8rem;
-        color: #64748b;
-    }
-
-    /* Active State */
-    .active .timelineDot {
-        background: #3b82f6;
-        box-shadow: 0 0 0 4px #dbeafe;
-    }
-
-    .active .timelineTitle {
-        color: #1e293b;
-    }
-
-    /* Completed State */
-    .completed .timelineDot {
-        background: #10b981;
-        box-shadow: 0 0 0 0;
-    }
-
-    .completed .timelineLine {
-        background: #10b981;
-    }
-
-    .completed .timelineTitle {
-        color: #059669;
-    }
+}

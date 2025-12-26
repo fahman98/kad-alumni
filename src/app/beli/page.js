@@ -63,17 +63,65 @@ export default function BeliKad() {
 
     const [previewUrl, setPreviewUrl] = useState(null);
 
-    const handleFileChange = (e) => {
+    // Image Compression Helper
+    const compressImage = (file) => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 1024; // Resize to max 1024px
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    canvas.toBlob((blob) => {
+                        const newFile = new File([blob], file.name, {
+                            type: 'image/jpeg',
+                            lastModified: Date.now(),
+                        });
+                        resolve(newFile);
+                    }, 'image/jpeg', 0.8); // 80% quality
+                };
+            };
+        });
+    };
+
+    const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            setFormData(prev => ({ ...prev, receipt: file }));
+            // Compress if image
+            if (file.type.startsWith('image/')) {
+                try {
+                    const compressedFile = await compressImage(file);
+                    setFormData(prev => ({ ...prev, receipt: compressedFile }));
 
-            // Create preview
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewUrl(reader.result);
-            };
-            reader.readAsDataURL(file);
+                    // Create preview
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        setPreviewUrl(reader.result);
+                    };
+                    reader.readAsDataURL(compressedFile);
+                } catch (err) {
+                    console.error("Compression error", err);
+                    // Fallback to original
+                    setFormData(prev => ({ ...prev, receipt: file }));
+                }
+            } else {
+                setFormData(prev => ({ ...prev, receipt: file }));
+            }
         }
     };
 
@@ -212,34 +260,36 @@ export default function BeliKad() {
     const handleNextStep2 = () => {
         const newErrors = {};
 
-        if (!formData.name) newErrors.name = true;
-        if (!formData.phone) newErrors.phone = true;
-        if (!formData.gradYear) newErrors.gradYear = true;
-        if (!formData.email) newErrors.email = true;
+        // Name Validation
+        if (!formData.name || formData.name.length < 3) {
+            newErrors.name = true;
+            setAlertMessage("Nama mestilah lebih daripada 3 huruf.");
+        }
+
+        // Phone Validation (011-1234567 or 0123456789)
+        const phoneRegex = /^(\+?6?0)[0-9]{9,11}$/;
+        const cleanPhone = formData.phone.replace(/-/g, '').replace(/\s/g, '');
+        if (!phoneRegex.test(cleanPhone)) {
+            newErrors.phone = true;
+            setAlertMessage("Nombor telefon tidak sah. Sila masukkan nombor yang betul (Contoh: 0123456789).");
+        }
+
+        // Email Validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            newErrors.email = true;
+            setAlertMessage("Alamat email tidak sah.");
+        }
+
+        // Grad Year Validation
+        if (!formData.gradYear || formData.gradYear < 1922 || formData.gradYear > new Date().getFullYear()) {
+            newErrors.gradYear = true;
+            setAlertMessage("Tahun graduasi tidak sah.");
+        }
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             setAlertType('error');
-            setAlertMessage("Sila lengkapkan maklumat yang bertanda merah.");
-            setShowAlert(true);
-            return;
-        }
-
-        // Email Regex Check
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(formData.email)) {
-            setErrors({ email: true });
-            setAlertType('error');
-            setAlertMessage("Alamat email tidak sah. Sila periksa semula.");
-            setShowAlert(true);
-            return;
-        }
-
-        // Phone Length Check (Min 10 digits)
-        if (formData.phone.length < 10) {
-            setErrors({ phone: true });
-            setAlertType('error');
-            setAlertMessage("Nombor telefon tidak lengkap (minima 10 digit).");
             setShowAlert(true);
             return;
         }

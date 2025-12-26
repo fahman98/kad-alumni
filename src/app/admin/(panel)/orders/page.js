@@ -12,6 +12,7 @@ export default function OrdersPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
     const [selectedReceipt, setSelectedReceipt] = useState(null);
+    const [selectedIds, setSelectedIds] = useState([]); // Bulk Selection
 
     // Pagination State
     const [currentPage, setCurrentPage] = useState(1);
@@ -178,6 +179,57 @@ export default function OrdersPage() {
         return url;
     };
 
+    // Export to Excel
+    const exportToExcel = () => {
+        const headers = ["Nama,Email,No. IC/Matrik,Status,Tarikh,Alamat,Tracking No"];
+        const rows = filteredOrders.map(o => {
+            const date = o.createdAt?.seconds ? new Date(o.createdAt.seconds * 1000).toLocaleDateString() : 'N/A';
+            const address = o.pickupMethod === 'delivery' ? `"${o.address}, ${o.postcode} ${o.city}"` : 'Self Pickup';
+            return `"${o.name}",${o.email},'${o.ic || o.matricNo}',${o.status},${date},${address},${o.details?.trackingNo || ''}`;
+        });
+
+        const csvContent = "data:text/csv;charset=utf-8," + [headers, ...rows].join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `Alumni_Orders_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+    };
+
+    // Bulk Actions
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            setSelectedIds(paginatedOrders.map(o => o.id));
+        } else {
+            setSelectedIds([]);
+        }
+    };
+
+    const handleSelectOne = (id) => {
+        if (selectedIds.includes(id)) {
+            setSelectedIds(prev => prev.filter(pid => pid !== id));
+        } else {
+            setSelectedIds(prev => [...prev, id]);
+        }
+    };
+
+    const handleBulkStatus = async (status) => {
+        if (!confirm(`Tukar status ${selectedIds.length} tempahan kepada '${status}'?`)) return;
+        setLoading(true);
+        try {
+            const promises = selectedIds.map(id => updateDoc(doc(db, "orders", id), { status }));
+            await Promise.all(promises);
+            setOrders(prev => prev.map(o => selectedIds.includes(o.id) ? { ...o, status } : o));
+            setSelectedIds([]);
+            alert("Berjaya kemaskini status.");
+        } catch (err) {
+            alert("Ralat: " + err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     // Filter Logic
     const filteredOrders = orders.filter(order => {
         const matchesSearch =
@@ -226,6 +278,9 @@ export default function OrdersPage() {
                     <option value="Shipped">Shipped</option>
                     <option value="Rejected">Rejected</option>
                 </select>
+                <button onClick={exportToExcel} className={styles.btnAction} style={{ background: '#10b981', color: 'white', fontSize: '0.9rem', padding: '10px 16px' }}>
+                    📊 Export Excel
+                </button>
             </div>
 
             {/* Table */}
@@ -233,6 +288,14 @@ export default function OrdersPage() {
                 <table className={styles.table}>
                     <thead>
                         <tr>
+                            <th style={{ width: '40px', textAlign: 'center' }}>
+                                <input
+                                    type="checkbox"
+                                    className={styles.checkbox}
+                                    onChange={handleSelectAll}
+                                    checked={paginatedOrders.length > 0 && selectedIds.length === paginatedOrders.length}
+                                />
+                            </th>
                             <th>Alumni</th>
                             <th>Info Kad</th>
                             <th>Status</th>
@@ -256,6 +319,9 @@ export default function OrdersPage() {
                                         <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '100px', margin: '0 auto' }}></div>
                                     </td>
                                     <td style={{ textAlign: 'center' }}>
+                                        <div className={`${styles.skeleton} ${styles.skeletonBadge}`} style={{ width: '20px' }}></div>
+                                    </td>
+                                    <td style={{ textAlign: 'center' }}>
                                         <div className={`${styles.skeleton} ${styles.skeletonBadge}`} style={{ width: '80px' }}></div>
                                     </td>
                                     <td style={{ textAlign: 'center' }}>
@@ -276,7 +342,15 @@ export default function OrdersPage() {
                             ))
                         ) : (
                             paginatedOrders.map(order => (
-                                <tr key={order.id}>
+                                <tr key={order.id} style={{ background: selectedIds.includes(order.id) ? '#eff6ff' : 'transparent' }}>
+                                    <td style={{ textAlign: 'center' }}>
+                                        <input
+                                            type="checkbox"
+                                            className={styles.checkbox}
+                                            checked={selectedIds.includes(order.id)}
+                                            onChange={() => handleSelectOne(order.id)}
+                                        />
+                                    </td>
                                     <td>
                                         <div className={styles.cellName}>{order.name}</div>
                                         <div className={styles.cellSub}>{order.email}</div>
@@ -394,6 +468,19 @@ export default function OrdersPage() {
                             </a>
                         </div>
                     </div>
+                </div>
+            )}
+
+            {/* Bulk Actions Bar */}
+            {selectedIds.length > 0 && (
+                <div className={styles.bulkActionBar}>
+                    <span className={styles.bulkCount}>{selectedIds.length} Selected</span>
+                    <button onClick={() => handleBulkStatus('Approved')} className={styles.bulkBtn} style={{ color: '#4ade80' }}>✓ Approve</button>
+                    <button onClick={() => handleBulkStatus('Printing')} className={styles.bulkBtn}>🖨️ Printing</button>
+                    <button onClick={() => handleBulkStatus('Ready')} className={styles.bulkBtn}>📦 Ready</button>
+                    <button onClick={() => handleBulkStatus('Shipped')} className={styles.bulkBtn}>🚚 Shipped</button>
+                    <div style={{ width: '1px', height: '24px', background: 'rgba(255,255,255,0.2)' }}></div>
+                    <button onClick={() => setSelectedIds([])} className={styles.bulkBtn}>Cancel</button>
                 </div>
             )}
 

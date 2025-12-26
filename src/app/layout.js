@@ -1,4 +1,5 @@
 import './globals.css'
+import BottomNav from './components/BottomNav';
 
 export const metadata = {
     title: 'Sistem Kad Alumni',
@@ -10,6 +11,7 @@ export default function RootLayout({ children }) {
         <html lang="ms">
             <body>
                 {children}
+                <BottomNav />
             </body>
         </html>
     )

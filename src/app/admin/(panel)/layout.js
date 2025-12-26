@@ -27,7 +27,17 @@ export default function AdminPanelLayout({ children }) {
 
     // Close sidebar on mobile route change automatically could be nice, but stick to simple logic first
 
-    if (loading) return <div className={styles.loading}>Loading...</div>;
+    if (loading) return (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#f3f4f6' }}>
+            <div style={{
+                width: '40px', height: '40px', border: '4px solid #e5e7eb',
+                borderTop: '4px solid #3b82f6', borderRadius: '50%', animation: 'spin 1s linear infinite'
+            }}></div>
+            <style jsx>{`
+                    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                `}</style>
+        </div>
+    );
 
     const navItems = [
         { name: 'Dashboard', path: '/admin/dashboard', icon: '📊' },

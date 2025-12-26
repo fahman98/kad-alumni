@@ -5,21 +5,29 @@ import styles from './page.module.css';
 import { db } from '../../../lib/firebase';
 import { collection, query, orderBy, getDocs, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 export default function AdminDashboard() {
     const router = useRouter();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Filter & Search States
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statusFilter, setStatusFilter] = useState('All');
+
+    // Pagination State
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    // Stats
+    const [stats, setStats] = useState({ total: 0, pending: 0, revenue: 0, completed: 0 });
+
     useEffect(() => {
-        // Basic auth check
         const isAdmin = localStorage.getItem('isAdmin');
         if (!isAdmin) {
             router.push('/admin/login');
             return;
         }
-
         fetchOrders();
     }, []);
 
@@ -32,128 +40,87 @@ export default function AdminDashboard() {
                 id: doc.id,
                 ...doc.data()
             }));
+
             setOrders(ordersData);
+            calculateStats(ordersData);
+
         } catch (error) {
-            console.error("Error fetching orders:", error);
-            alert("Gagal load orders.");
+            console.error("Error fetching", error);
         } finally {
             setLoading(false);
         }
     };
 
-    // GAS URL (Ideally from env but for client-side quick fix)
-    const GAS_API = "https://script.google.com/macros/s/AKfycbwnc520o-B_LSq9rtKsYQmj0bE_TI4GZQpREkWDRkK2-YLsrlSwufRI9pmszdOtcdbZ/exec";
+    const calculateStats = (data) => {
+        const total = data.length;
+        const pending = data.filter(o => o.status === 'Pending').length;
+        const completed = data.filter(o => ['Shipped', 'Ready', 'Completed'].includes(o.status)).length;
+        // Estimated Revenue: RM 10 per order (excluding rejected)
+        const revenue = data.filter(o => o.status !== 'Rejected').length * 10;
 
-    const sendEmail = async (order, type, details) => {
-        // details can be { alumniId } or { trackingNo }
-        let subject = "";
-        let body = "";
-
-        // Note: For MVP we hardcode the email templates here. 
-        // Ideally, these templates reside in GAS or a separate config.
-        if (type === 'Approved') {
-            subject = "Tahniah! Permohonan Kad Alumni Anda Diluluskan";
-            body = `
-                <h3>Tahniah, ${order.name}!</h3>
-                <p>Permohonan Kad Alumni anda telah diluluskan.</p>
-                <p><strong>No. Kad Alumni: ${details.alumniId}</strong></p>
-                <p>Kad anda sedang dalam proses percetakan.</p>
-                <hr>
-                <p>Pusat Alumni UPSI</p>
-            `;
-        } else if (type === 'Shipped') {
-            subject = "Kad Alumni Anda Telah Dipos";
-            body = `
-                <h3>Hai ${order.name},</h3>
-                <p>Kad Alumni anda telah dipos menggunakan J&T / PosLaju.</p>
-                <p><strong>Tracking No: ${details.trackingNo}</strong></p>
-                <p>Sila semak status penghantaran dalam masa 24 jam.</p>
-                <hr>
-                <p>Pusat Alumni UPSI</p>
-            `;
-        }
-
-        if (!subject) return;
-
-        // Fire & Forget (Don't wait strictly for email to finish to update UI, but good to log)
-        /*
-           CRITICAL: The current Order Form DOES NOT collect 'email'.
-           We need to fix this in future, but for now assuming 'phone' or 'ic' isn't email.
-           Since we don't have email in DB, we can't send email!
-
-           WAIT: The user *never* added an email field to the form in the earlier steps?
-           Let me check the Purchase Page code...
-           Steps 367 (view beli/page.js) shows formData: {name, ic, phone, alumniId, gradYear, pickupMethod, address, receipt}
-            THERE IS NO EMAIL FIELD!
-
-            I must alert the user about this. I cannot implement email sending if I don't have the user's email.
-            */
-        console.warn("No email field in order data. Email skipped.");
+        setStats({ total, pending, completed, revenue });
     };
 
-    const generateAlumniId = async (gradYear) => {
-        // Formula: 1922 + gradYear + RunningNo (Start 0101)
-        const prefix = `1922${gradYear}`;
+    // --- Search & Filter Logic ---
+    const getFilteredOrders = () => {
+        return orders.filter(order => {
+            const matchStatus = statusFilter === 'All' || order.status === statusFilter;
+            const searchLower = searchTerm.toLowerCase();
+            const matchSearch =
+                (order.name && order.name.toLowerCase().includes(searchLower)) ||
+                (order.ic && order.ic.includes(searchLower)) ||
+                (order.alumniId && order.alumniId.toLowerCase().includes(searchLower));
 
-        const existingIds = orders
-            .filter(o => o.alumniId && o.alumniId.startsWith(prefix))
-            .map(o => parseInt(o.alumniId.slice(-4)))
-            .sort((a, b) => b - a);
-
-        let nextRunningNo = 101;
-        if (existingIds.length > 0) {
-            nextRunningNo = existingIds[0] + 1;
-        }
-
-        const runningStr = nextRunningNo.toString().padStart(4, '0');
-        return `${prefix}${runningStr}`;
+            return matchStatus && matchSearch;
+        });
     };
 
+    const filteredOrders = getFilteredOrders();
+
+    // --- Pagination Logic ---
+    const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+    const paginatedOrders = filteredOrders.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    const handleLogout = () => {
+        localStorage.removeItem('isAdmin');
+        router.push('/admin/login');
+    };
+
+    // --- Actions (Keep existing logic) ---
     const updateStatus = async (orderId, newStatus) => {
         let extraData = {};
         const order = orders.find(o => o.id === orderId);
 
-        // 1. Logic for Approving (Auto Generate ID)
         if (newStatus === 'Approved') {
             const gradYear = order.gradYear;
-            if (!gradYear) {
-                alert("Tahun Graduasi tiada! Tak boleh generate ID.");
-                return;
-            }
-
-            const autoId = await generateAlumniId(gradYear);
-            const confirmedId = prompt(`Auto-Generated ID: ${autoId}\n\nTekan OK untuk setuju, atau edit jika perlu:`, autoId);
-
+            if (!gradYear) { alert("Tahun Graduasi tiada!"); return; }
+            const autoId = generateAlumniId(gradYear);
+            const confirmedId = prompt(`Auto-Generated ID: ${autoId}`, autoId);
             if (!confirmedId) return;
             extraData = { alumniId: confirmedId };
         }
 
-        // 2. Logic for Shipping (Assign Tracking No)
         if (newStatus === 'Shipped') {
-            const trackingNo = prompt("Masukkan Tracking No (J&T/PosLaju):");
+            const trackingNo = prompt("Masukkan Tracking No:");
             if (!trackingNo) return;
             extraData = { trackingNo: trackingNo };
         }
 
-        if (!confirm(`Sahkan status bertukar ke '${newStatus}'?`)) return;
+        if (!confirm(`Tukar status ke ${newStatus}?`)) return;
 
         try {
-            const orderRef = doc(db, "orders", orderId);
-            await updateDoc(orderRef, {
-                status: newStatus,
-                ...extraData
-            });
+            await updateDoc(doc(db, "orders", orderId), { status: newStatus, ...extraData });
 
-            // Try to send email (Will fail solely because we don't have the email address yet)
-            // But I will put the logic here so it's ready once we add the field.
-            if (order.email) {
-                await sendEmail(order, newStatus, extraData);
-                alert(`Status updated & Email sent to ${order.email}`);
-            } else {
-                alert('Status updated! (No Email sent - User email missing)');
-            }
+            // Optimistic Update
+            const updatedList = orders.map(o => o.id === orderId ? { ...o, status: newStatus, ...extraData } : o);
+            setOrders(updatedList);
+            calculateStats(updatedList); // Re-calc stats
 
-            setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus, ...extraData } : o));
+            // Attempt email (Mock)
+            // sendEmail(...) 
 
         } catch (e) {
             console.error(e);
@@ -162,41 +129,99 @@ export default function AdminDashboard() {
     };
 
     const deleteOrder = async (orderId) => {
-        if (!confirm("AMARAN: Data ini akan dipadam KEKAL. Anda pasti?")) return;
-
+        if (!confirm("Padam KEKAL?")) return;
         try {
             await deleteDoc(doc(db, "orders", orderId));
-            setOrders(prev => prev.filter(o => o.id !== orderId));
-            alert("Data berjaya dipadam.");
-        } catch (error) {
-            console.error(error);
-            alert("Gagal padam data.");
-        }
+            const updatedList = orders.filter(o => o.id !== orderId);
+            setOrders(updatedList);
+            calculateStats(updatedList);
+        } catch (e) { alert("Error deleting"); }
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem('isAdmin');
-        router.push('/admin/login');
+    const generateAlumniId = (gradYear) => {
+        const prefix = `1922${gradYear}`;
+        const existingIds = orders
+            .filter(o => o.alumniId && o.alumniId.startsWith(prefix))
+            .map(o => parseInt(o.alumniId.slice(-4)))
+            .sort((a, b) => b - a);
+        const nextRunningNo = existingIds.length > 0 ? existingIds[0] + 1 : 101;
+        return `${prefix}${nextRunningNo.toString().padStart(4, '0')}`;
     };
 
-    if (loading) return <div className={styles.loading}>Loading Orders...</div>;
+    if (loading) return <div className={styles.loading}>Loading Dashboard...</div>;
 
     return (
         <div className={styles.container}>
+            {/* Sidebar */}
             <aside className={styles.sidebar}>
-                <div className={styles.brand}>Admin Panel</div>
+                <div className={styles.brand}>🎓 Admin Panel</div>
                 <nav className={styles.nav}>
-                    <a href="#" className={styles.active}>Order List</a>
-                    <a href="#" onClick={handleLogout}>Log Keluar</a>
+                    <a href="#" className={`${styles.navLink} ${styles.activeLink}`}>Orders</a>
+                    <a href="#" className={styles.navLink}>Settings</a>
+                    <button onClick={handleLogout} className={styles.logoutBtn}>Log Keluar</button>
                 </nav>
             </aside>
 
+            {/* Main Content */}
             <main className={styles.mainContent}>
-                <header className={styles.header}>
-                    <h1>Senarai Permohonan ({orders.length})</h1>
-                    <button onClick={fetchOrders} className="btn btn-outline" style={{ fontSize: '0.8rem' }}>Refresh</button>
-                </header>
+                <div className={styles.topbar}>
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p style={{ color: '#64748b' }}>Selamat kembali, Admin.</p>
+                    </div>
+                </div>
 
+                {/* Stats Cards */}
+                <div className={styles.statsGrid}>
+                    <div className={styles.statCard}>
+                        <div className={styles.statTitle}>Total Order</div>
+                        <div className={styles.statValue}>{stats.total}</div>
+                    </div>
+                    <div className={styles.statCard}>
+                        <div className={styles.statTitle}>Pending</div>
+                        <div className={styles.statValue} style={{ color: '#d97706' }}>{stats.pending}</div>
+                    </div>
+                    <div className={styles.statCard}>
+                        <div className={styles.statTitle}>Completed</div>
+                        <div className={styles.statValue} style={{ color: '#059669' }}>{stats.completed}</div>
+                    </div>
+                    <div className={styles.statCard}>
+                        <div className={styles.statTitle}>Est. Revenue</div>
+                        <div className={styles.statValue} style={{ color: '#2563eb' }}>RM {stats.revenue}</div>
+                    </div>
+                </div>
+
+                {/* Controls */}
+                <div className={styles.controls}>
+                    <div className={styles.searchBar}>
+                        <span className={styles.searchIcon}>🔍</span>
+                        <input
+                            type="text"
+                            placeholder="Cari Nama, IC, atau Alumni ID..."
+                            className={styles.searchInput}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <select
+                            className={styles.filterSelect}
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value)}
+                        >
+                            <option value="All">Semua Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Printing">Printing</option>
+                            <option value="Ready">Ready</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                        <button onClick={fetchOrders} className="btn btn-outline">Refresh</button>
+                    </div>
+                </div>
+
+                {/* Table */}
                 <div className={styles.tableCard}>
                     <table className={styles.table}>
                         <thead>
@@ -206,11 +231,11 @@ export default function AdminDashboard() {
                                 <th>Jenis</th>
                                 <th>Status</th>
                                 <th>Resit</th>
-                                <th>Action</th>
+                                <th>Tindakan</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.map(order => (
+                            {paginatedOrders.map(order => (
                                 <tr key={order.id}>
                                     <td>
                                         <div className={styles.cellName}>{order.name}</div>
@@ -219,57 +244,79 @@ export default function AdminDashboard() {
                                     <td>
                                         <div>{order.ic}</div>
                                         <div className={styles.cellSub}>Grad: {order.gradYear}</div>
-                                        {order.alumniId && <div className={styles.tagId}>ID: {order.alumniId}</div>}
+                                        {order.alumniId && <div className={styles.tagId}>{order.alumniId}</div>}
                                     </td>
                                     <td>
-                                        <span className={`${styles.badge} ${order.pickupMethod === 'delivery' ? styles.badgeBlue : styles.badgeGray}`}>
+                                        <span className={order.pickupMethod === 'delivery' ? styles.badgeBlue : styles.badgeGray}>
                                             {order.pickupMethod === 'delivery' ? 'POS' : 'PICKUP'}
                                         </span>
                                         {order.pickupMethod === 'delivery' && order.trackingNo && (
-                                            <div className={styles.trackingInfo}>Trk: {order.trackingNo}</div>
+                                            <div className={styles.cellSub} style={{ fontSize: '0.75rem' }}>No: {order.trackingNo}</div>
                                         )}
-                                        {order.pickupMethod === 'pickup' && (
-                                            <div className={styles.dateInfo}>
-                                                {order.appointmentDate ? `📅 ${order.appointmentDate}` : '⏳ Belum Book'}
-                                            </div>
+                                        {order.pickupMethod === 'pickup' && !order.appointmentDate && (
+                                            <div className={styles.cellSub} style={{ color: '#d97706' }}>Pending Book</div>
                                         )}
                                     </td>
                                     <td>
-                                        <span className={styles.statusText} data-status={order.status}>
+                                        <span className={styles.statusBadge} data-status={order.status}>
                                             {order.status}
                                         </span>
                                     </td>
                                     <td>
                                         {order.receiptUrl ? (
-                                            <a href={order.receiptUrl} target="_blank" className={styles.link}>Lihat Resit</a>
-                                        ) : (
-                                            <span className={styles.cellSub}>Tiada</span>
-                                        )}
+                                            <a href={order.receiptUrl} target="_blank" style={{ color: '#2563eb', fontWeight: 500, fontSize: '0.85rem' }}>View</a>
+                                        ) : '-'}
                                     </td>
                                     <td>
                                         <div className={styles.actions}>
                                             {order.status === 'Pending' && (
                                                 <>
-                                                    <button onClick={() => updateStatus(order.id, 'Approved')} className={styles.btnApprove}>✓ Approve</button>
-                                                    <button onClick={() => updateStatus(order.id, 'Rejected')} className={styles.btnReject}>✕ Rej</button>
+                                                    <button onClick={() => updateStatus(order.id, 'Approved')} className={`${styles.btnAction} ${styles.btnApprove}`}>Approve</button>
+                                                    <button onClick={() => updateStatus(order.id, 'Rejected')} className={`${styles.btnAction} ${styles.btnReject}`}>Reject</button>
                                                 </>
                                             )}
                                             {order.status === 'Approved' && (
-                                                <button onClick={() => updateStatus(order.id, 'Printing')} className={styles.btnProcess}>⚡ Print</button>
+                                                <button onClick={() => updateStatus(order.id, 'Printing')} className={`${styles.btnAction} ${styles.btnPrint}`}>Print</button>
                                             )}
                                             {order.status === 'Printing' && (
-                                                <button onClick={() => updateStatus(order.id, 'Ready')} className={styles.btnReady}>📦 Ready</button>
+                                                <button onClick={() => updateStatus(order.id, 'Ready')} className={`${styles.btnAction} ${styles.btnReady}`}>Ready</button>
                                             )}
                                             {order.status === 'Ready' && order.pickupMethod === 'delivery' && (
-                                                <button onClick={() => updateStatus(order.id, 'Shipped')} className={styles.btnShip}>🚚 Ship</button>
+                                                <button onClick={() => updateStatus(order.id, 'Shipped')} className={`${styles.btnAction} ${styles.btnShip}`}>Ship</button>
                                             )}
-                                            <button onClick={() => deleteOrder(order.id)} className={styles.btnDelete} title="Padam Kekal">🗑️</button>
+                                            <button onClick={() => deleteOrder(order.id)} className={`${styles.btnAction} ${styles.btnDelete}`}>🗑️</button>
                                         </div>
                                     </td>
                                 </tr>
                             ))}
+                            {paginatedOrders.length === 0 && (
+                                <tr>
+                                    <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>
+                                        Tiada rekod ditemui.
+                                    </td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
+                </div>
+
+                {/* Pagination Controls */}
+                <div className={styles.pagination}>
+                    <button
+                        className={styles.pageBtn}
+                        disabled={currentPage === 1}
+                        onClick={() => setCurrentPage(p => p - 1)}
+                    >
+                        Previous
+                    </button>
+                    <span style={{ color: '#64748b' }}>Page {currentPage} of {totalPages || 1}</span>
+                    <button
+                        className={styles.pageBtn}
+                        disabled={currentPage === totalPages || totalPages === 0}
+                        onClick={() => setCurrentPage(p => p + 1)}
+                    >
+                        Next
+                    </button>
                 </div>
             </main>
         </div>

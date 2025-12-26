@@ -197,7 +197,7 @@ export default function OrdersPage() {
         currentPage * itemsPerPage
     );
 
-    if (loading) return <div>Loading orders...</div>;
+    // if (loading) return <div>Loading orders...</div>; // Removed simple loading
 
     return (
         <div>
@@ -242,72 +242,107 @@ export default function OrdersPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {paginatedOrders.map(order => (
-                            <tr key={order.id}>
-                                <td>
-                                    <div className={styles.cellName}>{order.name}</div>
-                                    <div className={styles.cellSub}>{order.email}</div>
-                                    <div className={styles.cellSub}>{order.phone}</div>
-                                </td>
-                                <td>
-                                    {order.cardType && (
-                                        <div className={styles.badgeBlue}>{order.cardType}</div>
-                                    )}
-                                    <div className={styles.tagId}>{order.matricNo || order.ic}</div>
-                                </td>
-                                <td>
-                                    <span className={styles.statusBadge} data-status={order.status || 'Pending'}>
-                                        {order.status || 'Pending'}
-                                    </span>
-                                </td>
-                                <td>
-                                    {order.receiptUrl ? (
-                                        <button
-                                            onClick={() => setSelectedReceipt(order.receiptUrl)}
-                                            className={styles.linkButton}
-                                        >
-                                            View
-                                        </button>
-                                    ) : '-'}
-                                </td>
-                                <td>
-                                    <div className={styles.badgeGray}>
-                                        {/* Matches value from src/app/beli/page.js: 'pickup' or 'delivery' */}
-                                        {order.pickupMethod ?
-                                            (order.pickupMethod === 'delivery' ? 'Pos' : 'Ambil Sendiri')
-                                            : 'N/A'
-                                        }
-                                    </div>
-                                    {order.pickupMethod === 'delivery' && (
-                                        <div className={styles.cellSub} style={{ fontSize: '0.7rem', maxWidth: '150px', margin: '4px auto 0' }}>
-                                            {order.address}, {order.postcode} {order.city}, {order.state}
+                        {loading ? (
+                            // Skeleton Rows
+                            [...Array(5)].map((_, i) => (
+                                <tr key={i}>
+                                    <td>
+                                        <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '120px', height: '16px' }}></div>
+                                        <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '180px' }}></div>
+                                        <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '100px' }}></div>
+                                    </td>
+                                    <td style={{ textAlign: 'center' }}>
+                                        <div className={`${styles.skeleton} ${styles.skeletonBadge}`} style={{ margin: '0 auto 4px' }}></div>
+                                        <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '100px', margin: '0 auto' }}></div>
+                                    </td>
+                                    <td style={{ textAlign: 'center' }}>
+                                        <div className={`${styles.skeleton} ${styles.skeletonBadge}`} style={{ width: '80px' }}></div>
+                                    </td>
+                                    <td style={{ textAlign: 'center' }}>
+                                        <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '40px', margin: '0 auto' }}></div>
+                                    </td>
+                                    <td style={{ textAlign: 'center' }}>
+                                        <div className={`${styles.skeleton} ${styles.skeletonBadge}`} style={{ width: '90px', marginBottom: '4px' }}></div>
+                                        <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '120px', margin: '0 auto' }}></div>
+                                    </td>
+                                    <td>
+                                        <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                                            <div className={`${styles.skeleton} ${styles.skeletonBtn}`}></div>
+                                            <div className={`${styles.skeleton} ${styles.skeletonBtn}`}></div>
+                                            <div className={`${styles.skeleton} ${styles.skeletonBtn}`}></div>
                                         </div>
-                                    )}
-                                </td>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            paginatedOrders.map(order => (
+                                <tr key={order.id}>
+                                    <td>
+                                        <div className={styles.cellName}>{order.name}</div>
+                                        <div className={styles.cellSub}>{order.email}</div>
+                                        <div className={styles.cellSub}>{order.phone}</div>
+                                    </td>
+                                    <td>
+                                        {order.cardType && (
+                                            <div className={styles.badgeBlue}>{order.cardType}</div>
+                                        )}
+                                        <div className={styles.tagId}>{order.matricNo || order.ic}</div>
+                                    </td>
+                                    <td>
+                                        <span className={styles.statusBadge} data-status={order.status || 'Pending'}>
+                                            {order.status || 'Pending'}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {order.receiptUrl ? (
+                                            <button
+                                                onClick={() => setSelectedReceipt(order.receiptUrl)}
+                                                className={styles.linkButton}
+                                            >
+                                                View
+                                            </button>
+                                        ) : '-'}
+                                    </td>
+                                    <td>
+                                        <div className={styles.badgeGray}>
+                                            {/* Matches value from src/app/beli/page.js: 'pickup' or 'delivery' */}
+                                            {order.pickupMethod ?
+                                                (order.pickupMethod === 'delivery' ? 'Pos' : 'Ambil Sendiri')
+                                                : 'N/A'
+                                            }
+                                        </div>
+                                        {order.pickupMethod === 'delivery' && (
+                                            <div className={styles.cellSub} style={{ fontSize: '0.7rem', maxWidth: '150px', margin: '4px auto 0' }}>
+                                                {order.address}, {order.postcode} {order.city}, {order.state}
+                                            </div>
+                                        )}
+                                    </td>
 
-                                <td>
-                                    <div className={styles.actions}>
-                                        {(order.status === 'Pending' || !order.status) && (
-                                            <>
-                                                <button onClick={() => updateStatus(order.id, 'Approved')} className={`${styles.btnAction} ${styles.btnApprove}`} title="Approve">✓</button>
-                                                <button onClick={() => updateStatus(order.id, 'Rejected')} className={`${styles.btnAction} ${styles.btnReject}`} title="Reject">✕</button>
-                                            </>
-                                        )}
-                                        {order.status === 'Approved' && (
-                                            <button onClick={() => updateStatus(order.id, 'Printing')} className={`${styles.btnAction} ${styles.btnPrint}`}>Print</button>
-                                        )}
-                                        {order.status === 'Printing' && (
-                                            <button onClick={() => updateStatus(order.id, 'Ready')} className={`${styles.btnAction} ${styles.btnReady}`}>Ready</button>
-                                        )}
-                                        {order.status === 'Ready' && order.pickupMethod === 'shipping' && (
-                                            <button onClick={() => updateStatus(order.id, 'Shipped')} className={`${styles.btnAction} ${styles.btnShip}`}>Ship</button>
-                                        )}
-                                        <button onClick={() => deleteOrder(order.id)} className={`${styles.btnAction} ${styles.btnDelete}`}>🗑️</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                        {paginatedOrders.length === 0 && (
+                                    <td>
+                                        <div className={styles.actions}>
+                                            {(order.status === 'Pending' || !order.status) && (
+                                                <>
+                                                    <button onClick={() => updateStatus(order.id, 'Approved')} className={`${styles.btnAction} ${styles.btnApprove}`} title="Approve">✓</button>
+                                                    <button onClick={() => updateStatus(order.id, 'Rejected')} className={`${styles.btnAction} ${styles.btnReject}`} title="Reject">✕</button>
+                                                </>
+                                            )}
+                                            {order.status === 'Approved' && (
+                                                <button onClick={() => updateStatus(order.id, 'Printing')} className={`${styles.btnAction} ${styles.btnPrint}`}>Print</button>
+                                            )}
+                                            {order.status === 'Printing' && (
+                                                <button onClick={() => updateStatus(order.id, 'Ready')} className={`${styles.btnAction} ${styles.btnReady}`}>Ready</button>
+                                            )}
+                                            {order.status === 'Ready' && order.pickupMethod === 'shipping' && (
+                                                <button onClick={() => updateStatus(order.id, 'Shipped')} className={`${styles.btnAction} ${styles.btnShip}`}>Ship</button>
+                                            )}
+                                            <button onClick={() => deleteOrder(order.id)} className={`${styles.btnAction} ${styles.btnDelete}`}>🗑️</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        )}
+                        {/* Close ternary */}
+                        {!loading && paginatedOrders.length === 0 && (
                             <tr>
                                 <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>
                                     Tiada rekod ditemui.

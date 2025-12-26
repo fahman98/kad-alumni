@@ -53,43 +53,112 @@ export const getApprovalEmail = (name, ic, cardId, date) => {
 
 export const getReadyEmail = (name, bookingLink) => {
     return `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
-            <h2 style="color: #10b981;">Kad Anda Telah Siap Dicetak!</h2>
-            <p>Salam Sejahtera <strong>${name}</strong>,</p>
-            <p>Kad Alumni anda telah siap dicetak dan sedia untuk diambil di pejabat kami.</p>
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #dfe4ea; border-radius: 8px; overflow: hidden; background-color: #ffffff;">
             
-            <p>Sila tetapkan tarikh pengambilan menerusi pautan di bawah. (Isnin - Jumaat SAHAJA).</p>
-
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="${bookingLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">Pilih Tarikh Pengambilan</a>
+            <!-- Header -->
+            <div style="background-color: #1e3a8a; padding: 30px 20px; text-align: center; color: white;">
+                <h1 style="margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px;">KAD ALUMNI UPSI</h1>
+                <p style="margin: 10px 0 0 0; font-size: 14px; opacity: 0.9;">Notifikasi Siap Cetak</p>
             </div>
 
-            <p>Sila bawa kad pengenalan anda semasa pengambilan.</p>
+            <!-- Body -->
+            <div style="padding: 30px;">
+                <p style="margin-top: 0; color: #374151;">Salam Sejahtera <strong>${name}</strong>,</p>
+                
+                <h2 style="color: #10b981; font-size: 18px; margin: 20px 0;">Tahniah! Kad Alumni anda telah SIAP DICETAK.</h2>
+                
+                <p style="color: #4b5563; margin-bottom: 20px;">Sila tetapkan tarikh pengambilan kad anda:</p>
 
-            <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 20px 0;">
-            <p style="font-size: 0.9rem; color: #6b7280;">Pusat Alumni UPSI</p>
+                <!-- Details Table -->
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+                    <tr>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 14px;">Nama</td>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; color: #111827; font-weight: bold; text-align: right; text-transform: uppercase;">${name}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 14px;">Kaedah</td>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; color: #111827; font-weight: bold; text-align: right;">Ambil Sendiri (Pickup)</td>
+                    </tr>
+                    <tr style="background-color: #f0fdf4;">
+                        <td style="padding: 12px 10px; color: #15803d; font-size: 14px; font-weight: 500;">Status</td>
+                        <td style="padding: 12px 10px; color: #15803d; font-weight: bold; text-align: right; font-size: 14px;">SEDIA DIAMBIL</td>
+                    </tr>
+                </table>
+
+                <!-- Action Button -->
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${bookingLink}" style="background-color: #1e3a8a; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-block;">📅 Pilih Tarikh Pengambilan</a>
+                </div>
+
+                <!-- Info Box -->
+                <div style="background-color: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 4px; font-size: 14px; color: #92400e; line-height: 1.5;">
+                    <strong>Peringatan:</strong> Sila bawa Kad Pengenalan anda semasa pengambilan. Pejabat dibuka Isnin - Jumaat SAHAJA.
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="padding: 20px; background-color: #f9fafb; text-align: center; border-top: 1px solid #e5e7eb;">
+                <p style="margin: 0; font-size: 12px; color: #9ca3af;">Ini adalah cetakan komputer. Tandatangan tidak diperlukan.</p>
+                <p style="margin: 5px 0 0 0; font-size: 12px; color: #9ca3af;">&copy; ${new Date().getFullYear()} Pusat Alumni UPSI</p>
+            </div>
         </div>
     `;
 };
 
 export const getShippedEmail = (name, trackingNo, courierFee, trackingLink) => {
     return `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
-            <h2 style="color: #0d9488;">Kad Anda Telah Dipos 🚚</h2>
-            <p>Salam Sejahtera <strong>${name}</strong>,</p>
-            <p>Kad Alumni anda telah diserahkan kepada pihak kurier.</p>
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #dfe4ea; border-radius: 8px; overflow: hidden; background-color: #ffffff;">
             
-            <div style="background: #f0f9ff; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #0ea5e9;">
-                <p style="margin: 0;"><strong>Tracking No:</strong> ${trackingNo}</p>
-                <p style="margin: 10px 0 0 0;"><strong>Kaedah Bayaran:</strong> DFOD (Delivery Fee on Delivery)</p>
-                <p style="margin: 5px 0 0 0; color: #dc2626; font-weight: bold;">Sila sediakan wang tunai: RM ${courierFee}</p>
+            <!-- Header -->
+            <div style="background-color: #1e3a8a; padding: 30px 20px; text-align: center; color: white;">
+                <h1 style="margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px;">KAD ALUMNI UPSI</h1>
+                <p style="margin: 10px 0 0 0; font-size: 14px; opacity: 0.9;">Makluman Penghantaran Kad</p>
             </div>
 
-            <p>Jejak status penghantaran anda di sini:</p>
-            <p><a href="${trackingLink}" style="color: #2563eb; text-decoration: underline;">Klik Untuk Jejak</a></p>
+            <!-- Body -->
+            <div style="padding: 30px;">
+                <p style="margin-top: 0; color: #374151;">Salam Sejahtera <strong>${name}</strong>,</p>
+                
+                <h2 style="color: #0d9488; font-size: 18px; margin: 20px 0;">Tahniah! Kad Alumni anda telah DIPOS. 🚚</h2>
+                
+                <p style="color: #4b5563; margin-bottom: 20px;">Berikut adalah status penghantaran kad anda:</p>
 
-            <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 20px 0;">
-            <p style="font-size: 0.9rem; color: #6b7280;">Pusat Alumni UPSI</p>
+                <!-- Details Table -->
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+                    <tr>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 14px;">Nama</td>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; color: #111827; font-weight: bold; text-align: right; text-transform: uppercase;">${name}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 14px;">Tracking No</td>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; color: #111827; font-weight: bold; text-align: right;">${trackingNo}</td>
+                    </tr>
+                     <tr>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 14px;">Kaedah Bayaran</td>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; color: #111827; font-weight: bold; text-align: right;">DFOD (Bayar Waktu Terima)</td>
+                    </tr>
+                    <tr style="background-color: #ecfdf5;">
+                        <td style="padding: 12px 10px; color: #047857; font-size: 14px; font-weight: 500;">Jumlah Perlu Dibayar</td>
+                        <td style="padding: 12px 10px; color: #047857; font-weight: bold; text-align: right; font-size: 16px;">RM ${courierFee}</td>
+                    </tr>
+                </table>
+
+                <!-- Action Button -->
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${trackingLink}" style="background-color: #0d9488; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-block;">🔍 Jejak Penghantaran</a>
+                </div>
+
+                <!-- Info Box -->
+                <div style="background-color: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 4px; font-size: 14px; color: #92400e; line-height: 1.5;">
+                    <strong>Peringatan:</strong> Sila sediakan wang tunai secukupnya untuk bayaran kepada pihak kurier semasa penerimaan.
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="padding: 20px; background-color: #f9fafb; text-align: center; border-top: 1px solid #e5e7eb;">
+                <p style="margin: 0; font-size: 12px; color: #9ca3af;">Ini adalah cetakan komputer. Tandatangan tidak diperlukan.</p>
+                <p style="margin: 5px 0 0 0; font-size: 12px; color: #9ca3af;">&copy; ${new Date().getFullYear()} Pusat Alumni UPSI</p>
+            </div>
         </div>
     `;
 };

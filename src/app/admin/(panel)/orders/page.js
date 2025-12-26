@@ -87,6 +87,9 @@ export default function OrdersPage() {
 
                         // Trigger Email Notification (Non-blocking usually, but lets await to ensure)
                         if (orderData) {
+                            // Format ID for display (e.g. 1922 2023 0101)
+                            const formattedCardId = generatedCardId.replace(/(\d{4})(\d{4})(\d{4})/, '$1 $2 $3');
+
                             fetch('/api/notify/approve', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
@@ -94,7 +97,7 @@ export default function OrdersPage() {
                                     name: orderData.name,
                                     email: orderData.email,
                                     ic: orderData.ic,
-                                    cardId: generatedCardId,
+                                    cardId: formattedCardId,
                                     date: new Date().toLocaleDateString('ms-MY')
                                 })
                             }).catch(err => console.error("Email API failed", err));

@@ -272,13 +272,13 @@ export default function OrdersPage() {
                                 </td>
                                 <td>
                                     <div className={styles.badgeGray}>
-                                        {/* Assuming pickupMethod was meant here but handling safely if missing */}
+                                        {/* Matches value from src/app/beli/page.js: 'pickup' or 'delivery' */}
                                         {order.pickupMethod ?
-                                            (order.pickupMethod === 'shipping' ? 'Pos' : 'Ambil Sendiri')
+                                            (order.pickupMethod === 'delivery' ? 'Pos' : 'Ambil Sendiri')
                                             : 'N/A'
                                         }
                                     </div>
-                                    {order.pickupMethod === 'shipping' && (
+                                    {order.pickupMethod === 'delivery' && (
                                         <div className={styles.cellSub} style={{ fontSize: '0.7rem', maxWidth: '150px' }}>
                                             {order.address}, {order.postcode} {order.city}, {order.state}
                                         </div>

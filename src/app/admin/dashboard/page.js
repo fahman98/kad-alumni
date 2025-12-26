@@ -43,7 +43,8 @@ export default function AdminDashboard() {
             }
 
             if (id) {
-                return `https://drive.google.com/uc?export=view&id=${id}`;
+                // Use lh3.googleusercontent.com which is more reliable for embedding images
+                return `https://lh3.googleusercontent.com/d/${id}=s1000?authuser=0`;
             }
         }
         return url;

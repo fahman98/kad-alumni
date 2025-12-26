@@ -286,6 +286,48 @@
         padding: 2rem;
     }
 
+    /* Timer Styles */
+    .timerContainer {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        padding: 0.75rem;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+        animation: pulse 2s infinite;
+    }
+
+    .timerIcon {
+        font-size: 1.2rem;
+    }
+
+    .timerText strong {
+        font-size: 1.1rem;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        /* Prevents jittering */
+        margin-left: 5px;
+    }
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+        }
+
+        70% {
+            box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+        }
+    }
+
     .row {
         grid-template-columns: 1fr;
         gap: 1rem;

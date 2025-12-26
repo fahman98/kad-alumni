@@ -246,6 +246,27 @@ export default function BeliKad() {
         }
     };
 
+    // Countdown Timer Logic
+    const [timeLeft, setTimeLeft] = useState(300); // 5 minutes = 300 seconds
+
+    useEffect(() => {
+        let interval = null;
+        if (step === 4 && timeLeft > 0) {
+            interval = setInterval(() => {
+                setTimeLeft((prevTime) => prevTime - 1);
+            }, 1000);
+        } else if (timeLeft === 0) {
+            clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+    }, [step, timeLeft]);
+
+    const formatTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    };
+
     return (
         <div className={styles.container}>
             {/* Custom Modal */}
@@ -428,6 +449,15 @@ export default function BeliKad() {
                 {step === 4 && (
                     <form onSubmit={handleSubmit} className={styles.step}>
                         <h3>Langkah 4: Bukti Bayaran</h3>
+
+                        {/* Countdown Timer */}
+                        <div className={styles.timerContainer}>
+                            <span className={styles.timerIcon}>⏳</span>
+                            <span className={styles.timerText}>
+                                Sila selesaikan bayaran dalam: <strong>{formatTime(timeLeft)}</strong>
+                            </span>
+                        </div>
+
                         <div className={styles.alertInfo}>
                             <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
                                 <p style={{ marginBottom: '10px' }}>Sila buat bayaran <strong>RM 10.00</strong> ke akaun:</p>

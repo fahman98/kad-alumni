@@ -64,8 +64,10 @@ export default function OrdersPage() {
                     let loadingMsg = "Updating...";
 
                     if (newStatus === 'Approved') {
+                        const orderData = orders.find(o => o.id === id);
+
                         // ID Generation: 1922 + GradYear + Running No (Start 0101)
-                        const gradYear = orderData.gradYear || new Date().getFullYear(); // Fallback to current year if missing
+                        const gradYear = orderData?.gradYear || new Date().getFullYear(); // Fallback to current year if missing
                         const prefix = `1922${gradYear}`;
 
                         // Find all existing IDs for this gradYear
@@ -84,7 +86,6 @@ export default function OrdersPage() {
                         updates.generatedId = generatedCardId;
 
                         // Trigger Email Notification (Non-blocking usually, but lets await to ensure)
-                        const orderData = orders.find(o => o.id === id);
                         if (orderData) {
                             fetch('/api/notify/approve', {
                                 method: 'POST',

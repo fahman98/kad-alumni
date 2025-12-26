@@ -300,7 +300,7 @@
         align-items: center;
         justify-content: center;
         gap: 10px;
-        margin-top: 15px;
+        margin: 1.5rem 0;
         font-size: 1rem;
         font-weight: 600;
         box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2);

@@ -94,9 +94,13 @@ export default function OrdersPage() {
                             // Format ID for display (e.g. 1922 2023 0101)
                             const formattedCardId = generatedCardId.replace(/(\d{4})(\d{4})(\d{4})/, '$1 $2 $3');
 
+                            // Date Approved
+                            const approvedDate = new Date().toLocaleDateString('en-GB'); // DD/MM/YYYY format
+
                             // SEND APPROVAL EMAIL
-                            const emailContent = getApprovalEmail(orderData.name, formattedCardId, orderData.receiptUrl);
-                            sendEmail(orderData.email, "Permohonan Kad Alumni Lulus ✅", emailContent);
+                            // Template signature: (name, ic, cardId, date)
+                            const emailContent = getApprovalEmail(orderData.name, orderData.ic, formattedCardId, approvedDate);
+                            sendEmail(orderData.email, "Keputusan Permohonan Kad Alumni UPSI", emailContent);
                         }
                     }
 

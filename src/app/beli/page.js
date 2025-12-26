@@ -195,14 +195,20 @@ export default function BeliKad() {
         { id: 4, label: 'Bayaran' }
     ];
 
-    // Custom Alert State
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertMessage, setAlertMessage] = useState('');
+    // Validation State
+    const [errors, setErrors] = useState({});
 
     const handleNextStep2 = () => {
-        // Basic Empty Check
-        if (!formData.name || !formData.phone || !formData.gradYear || !formData.email) {
-            setAlertMessage("Sila lengkapkan semua maklumat bertanda *");
+        const newErrors = {};
+
+        if (!formData.name) newErrors.name = true;
+        if (!formData.phone) newErrors.phone = true;
+        if (!formData.gradYear) newErrors.gradYear = true;
+        if (!formData.email) newErrors.email = true;
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            setAlertMessage("Sila lengkapkan maklumat yang bertanda merah.");
             setShowAlert(true);
             return;
         }
@@ -210,11 +216,13 @@ export default function BeliKad() {
         // Email Regex Check
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(formData.email)) {
-            setAlertMessage("Sila masukkan alamat email yang sah (contoh: nama@gmail.com)");
+            setErrors({ email: true });
+            setAlertMessage("Alamat email tidak sah. Sila periksa semula.");
             setShowAlert(true);
             return;
         }
 
+        setErrors({}); // Clear errors
         setStep(3);
     };
 
@@ -224,11 +232,11 @@ export default function BeliKad() {
             {showAlert && (
                 <div className={styles.modalOverlay} onClick={() => setShowAlert(false)}>
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                        <div className={styles.modalIcon}>⚠️</div>
-                        <h3 className={styles.modalTitle}>Perhatian</h3>
+                        <div className={styles.modalIcon} style={{ background: '#fef2f2', color: '#ef4444' }}>⚠️</div>
+                        <h3 className={styles.modalTitle}>Maklumat Tidak Lengkap</h3>
                         <p className={styles.modalMessage}>{alertMessage}</p>
-                        <button className={styles.modalButton} onClick={() => setShowAlert(false)}>
-                            Faham
+                        <button className={styles.modalButton} onClick={() => setShowAlert(false)} style={{ background: '#ef4444' }}>
+                            Semak Semula
                         </button>
                     </div>
                 </div>
@@ -252,7 +260,7 @@ export default function BeliKad() {
                     <div className={styles.step}>
                         <h3>Langkah 1: Semakan Kelayakan</h3>
                         <div className={styles.inputGroup}>
-                            <label>No. Kad Pengenalan / Pasport</label>
+                            <label>No. Kad Pengenalan / Pasport <span style={{ color: 'red' }}>*</span></label>
                             <input
                                 type="text"
                                 name="ic"
@@ -276,21 +284,49 @@ export default function BeliKad() {
                     <div className={styles.step}>
                         <h3>Langkah 2: Maklumat Peribadi</h3>
                         <div className={styles.inputGroup}>
-                            <label>Nama Penuh</label>
-                            <input type="text" name="name" value={formData.name} onChange={handleChange} required className={styles.input} />
+                            <label>Nama Penuh <span style={{ color: 'red' }}>*</span></label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
+                                placeholder="Nama Penuh Mengikut IC"
+                            />
                         </div>
                         <div className={styles.row}>
                             <div className={styles.inputGroup}>
-                                <label>No. Telefon</label>
-                                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className={styles.input} />
+                                <label>No. Telefon <span style={{ color: 'red' }}>*</span></label>
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    className={`${styles.input} ${errors.phone ? styles.inputError : ''}`}
+                                    placeholder="0123456789"
+                                />
                             </div>
                             <div className={styles.inputGroup}>
-                                <label>Email</label>
-                                <input type="email" name="email" value={formData.email} onChange={handleChange} required className={styles.input} placeholder="contoh@gmail.com" />
+                                <label>Email <span style={{ color: 'red' }}>*</span></label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
+                                    placeholder="contoh@gmail.com"
+                                />
                             </div>
                             <div className={styles.inputGroup}>
-                                <label>Tahun Graduasi</label>
-                                <input type="number" name="gradYear" value={formData.gradYear} onChange={handleChange} required className={styles.input} />
+                                <label>Tahun Graduasi <span style={{ color: 'red' }}>*</span></label>
+                                <input
+                                    type="number"
+                                    name="gradYear"
+                                    value={formData.gradYear}
+                                    onChange={handleChange}
+                                    className={`${styles.input} ${errors.gradYear ? styles.inputError : ''}`}
+                                    placeholder="2023"
+                                />
                             </div>
                         </div>
                         <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>

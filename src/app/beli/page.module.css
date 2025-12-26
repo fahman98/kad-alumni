@@ -208,6 +208,12 @@
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+.inputError {
+    border-color: #ef4444 !important;
+    background: #fef2f2;
+    animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
 .row {
     display: grid;
     grid-template-columns: 1fr 1fr;

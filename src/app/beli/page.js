@@ -360,21 +360,21 @@ export default function BeliKad() {
                         {formData.pickupMethod === 'delivery' && (
                             <>
                                 <div className={styles.inputGroup}>
-                                    <label>Alamat (No. Rumah, Jalan, Taman)</label>
+                                    <label>Alamat (No. Rumah, Jalan, Taman) <span style={{ color: 'red' }}>*</span></label>
                                     <input type="text" name="address1" value={formData.address1} onChange={handleChange} required className={styles.input} placeholder="Contoh: No 12, Jalan Alumni 1, Taman Pewira" />
                                 </div>
                                 <div className={styles.row}>
                                     <div className={styles.inputGroup}>
-                                        <label>Poskod</label>
+                                        <label>Poskod <span style={{ color: 'red' }}>*</span></label>
                                         <input type="text" name="postcode" value={formData.postcode} onChange={handleChange} required maxLength="5" className={styles.input} placeholder="35900" />
                                     </div>
                                     <div className={styles.inputGroup}>
-                                        <label>Bandar {lookupLoading && '...'}</label>
+                                        <label>Bandar {lookupLoading && '...'} <span style={{ color: 'red' }}>*</span></label>
                                         <input type="text" name="city" value={formData.city} onChange={handleChange} required className={styles.input} />
                                     </div>
                                 </div>
                                 <div className={styles.inputGroup}>
-                                    <label>Negeri</label>
+                                    <label>Negeri <span style={{ color: 'red' }}>*</span></label>
                                     <input type="text" name="state" value={formData.state} onChange={handleChange} required className={styles.input} />
                                 </div>
                                 <small className={styles.smallText}>Kos penghantaran ditanggung penerima (DFOD via J&T).</small>
@@ -435,7 +435,7 @@ export default function BeliKad() {
                             </small>
                         </div>
                         <div className={styles.inputGroup}>
-                            <label>Muat Naik Resit</label>
+                            <label>Muat Naik Resit <span style={{ color: 'red' }}>*</span></label>
                             <input type="file" onChange={handleFileChange} required accept="image/*" className={styles.input} />
                             {previewUrl && (
                                 <div style={{ marginTop: '10px', textAlign: 'center' }}>

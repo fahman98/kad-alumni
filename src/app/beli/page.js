@@ -590,7 +590,7 @@ export default function BeliKad() {
                         {/* ReCAPTCHA */}
                         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
                             <ReCAPTCHA
-                                sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // Google Test Key (Safe for Dev)
+                                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"} // Use env or fallback to test key
                                 onChange={(token) => setCaptchaToken(token)}
                             />
                         </div>

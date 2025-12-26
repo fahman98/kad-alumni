@@ -1,0 +1,176 @@
+/* Layout Structure */
+.container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f3f4f6;
+    /* Gray 100 */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #111827;
+    /* Gray 900 */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: linear-gradient(180deg, #1e3a8a 0%, #172554 100%);
+    /* Deep Blue Theme */
+    border-right: 1px solid #1e40af;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 50;
+    color: #e5e7eb;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
+}
+
+.sidebarClosed {
+    transform: translateX(-100%);
+}
+
+.brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 0.5rem;
+    letter-spacing: -0.025em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1.5rem;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.navLink {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: #bfdbfe;
+    /* Blue 200 */
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.navLink:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.activeLink {
+    background: rgba(255, 255, 255, 0.15);
+    /* Translucent white */
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logoutBtn {
+    margin-top: auto;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    color: #fca5a5;
+    /* Red 300 */
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    text-align: left;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logoutBtn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ffffff;
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* Main Content Wrapper */
+.mainWrapper {
+    flex: 1;
+    margin-left: 280px;
+    width: calc(100% - 280px);
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.mainWrapperExpanded {
+    margin-left: 0;
+    width: 100%;
+}
+
+/* Topbar */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem 2.5rem 1rem 2.5rem;
+    /* Matches content padding top */
+}
+
+.topbar h1 {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: #111827;
+    letter-spacing: -0.025em;
+    margin: 0;
+}
+
+.topbar p {
+    color: #6b7280;
+    margin-top: 5px;
+}
+
+.toggleBtn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #374151;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+/* Page Content Area */
+.pageContent {
+    padding: 1.5rem 2.5rem 2.5rem 2.5rem;
+    flex: 1;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebarOpenMobile {
+        /* Need a way to show it on mobile if state is handled differently, or rely on desktop logic */
+        transform: translateX(0);
+    }
+
+    /* Reuse desktop collapsed logic for mobile hidden */
+    .mainWrapper {
+        margin-left: 0;
+        width: 100%;
+    }
+}

@@ -1,0 +1,66 @@
+.floatBtn {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background-color: #25D366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 999;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: bounceIn 1s;
+}
+
+.floatBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.3);
+}
+
+.label {
+    position: absolute;
+    right: 70px;
+    background: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: #0f172a;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.floatBtn:hover .label {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Adjust for mobile bottom nav (bottom nav is ~60px height + padding) */
+@media (max-width: 768px) {
+    .floatBtn {
+        bottom: 80px; 
+        right: 20px;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .floatBtn svg {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+}

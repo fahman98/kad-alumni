@@ -1,5 +1,6 @@
 import './globals.css'
 import BottomNav from './components/BottomNav';
+import WhatsAppWidget from './components/WhatsAppWidget';
 
 export const metadata = {
     title: 'Sistem Kad Alumni',
@@ -12,6 +13,7 @@ export default function RootLayout({ children }) {
             <body>
                 {children}
                 <BottomNav />
+                <WhatsAppWidget />
             </body>
         </html>
     )

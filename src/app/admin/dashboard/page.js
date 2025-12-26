@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import styles from './page.module.css';
-import { db } from '../../../lib/firebase';
+import { db, auth } from '../../../lib/firebase';
 import { collection, query, orderBy, getDocs, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 
 export default function AdminDashboard() {
@@ -23,12 +24,15 @@ export default function AdminDashboard() {
     const [stats, setStats] = useState({ total: 0, pending: 0, revenue: 0, completed: 0 });
 
     useEffect(() => {
-        const isAdmin = localStorage.getItem('isAdmin');
-        if (!isAdmin) {
-            router.push('/admin/login');
-            return;
-        }
-        fetchOrders();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                router.push('/admin/login');
+            } else {
+                fetchOrders();
+            }
+        });
+
+        return () => unsubscribe();
     }, []);
 
     const fetchOrders = async () => {
@@ -84,9 +88,13 @@ export default function AdminDashboard() {
         currentPage * itemsPerPage
     );
 
-    const handleLogout = () => {
-        localStorage.removeItem('isAdmin');
-        router.push('/admin/login');
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            router.push('/admin/login');
+        } catch (error) {
+            console.error("Logout failed", error);
+        }
     };
 
     // --- Actions (Keep existing logic) ---

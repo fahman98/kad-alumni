@@ -195,6 +195,23 @@ export default function BeliKad() {
         { id: 4, label: 'Bayaran' }
     ];
 
+    const handleNextStep2 = () => {
+        // Basic Empty Check
+        if (!formData.name || !formData.phone || !formData.gradYear || !formData.email) {
+            alert("Sila lengkapkan semua maklumat bertanda *");
+            return;
+        }
+
+        // Email Regex Check
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            alert("Sila masukkan alamat email yang sah (contoh: nama@gmail.com)");
+            return;
+        }
+
+        setStep(3);
+    };
+
     return (
         <div className={styles.container}>
             <div className={`glass ${styles.formCard}`}>

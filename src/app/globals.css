@@ -87,3 +87,19 @@ label {
   color: #475569;
   font-size: 0.9rem;
 }
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+}
+
+.btn-outline:hover {
+  border-color: #94a3b8;
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.full-width {
+  width: 100%;
+}

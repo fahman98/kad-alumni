@@ -233,7 +233,7 @@ export default function OrdersPage() {
                 <table className={styles.table}>
                     <thead>
                         <tr>
-                            <th>Pelajar</th>
+                            <th>Alumni</th>
                             <th>Info Kad</th>
                             <th>Status</th>
                             <th>Bukti Bayaran</th>

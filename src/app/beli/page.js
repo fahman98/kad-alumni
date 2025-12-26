@@ -450,18 +450,6 @@ export default function BeliKad() {
                     <form onSubmit={handleSubmit} className={styles.step}>
                         <h3>Langkah 4: Bukti Bayaran</h3>
 
-                        {/* Countdown Timer */}
-                        <div className={styles.timerContainer}>
-                            <span className={styles.timerIcon}>⏳</span>
-                            <span className={styles.timerText}>
-                                Sila selesaikan bayaran dalam: <strong>{formatTime(timeLeft)}</strong>
-                            </span>
-                        </div>
-
-                        <div className={styles.alertInfo}>
-                            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                                <p style={{ marginBottom: '10px' }}>Sila buat bayaran <strong>RM 10.00</strong> ke akaun:</p>
-
                                 {/* QR Code Section */}
                                 <div style={{ marginBottom: '15px' }}>
                                     <img
@@ -481,6 +469,14 @@ export default function BeliKad() {
                                     </div>
                                 </div>
 
+                                {/* Countdown Timer */}
+                                <div className={styles.timerContainer}>
+                                    <span className={styles.timerIcon}>⏳</span>
+                                    <span className={styles.timerText}>
+                                        Sila selesaikan bayaran dalam: <strong>{formatTime(timeLeft)}</strong>
+                                    </span>
+                                </div>
+
                                 <div style={{ background: '#eff6ff', padding: '10px', borderRadius: '8px', fontSize: '0.85rem', color: '#1e40af', marginBottom: '15px', textAlign: 'left' }}>
                                     <strong>💡 Tips Bayaran Pantas:</strong>
                                     <ol style={{ margin: '5px 0 0 1.2rem', padding: 0 }}>
@@ -494,36 +490,37 @@ export default function BeliKad() {
                                 *Sila simpan resit pembayaran untuk dimuat naik di bawah.
                             </small>
                         </div>
-                        <div className={styles.inputGroup}>
-                            <label>Muat Naik Resit <span style={{ color: 'red' }}>*</span></label>
-                            <input type="file" onChange={handleFileChange} required accept="image/*" className={styles.input} />
-                            {previewUrl && (
-                                <div style={{ marginTop: '10px', textAlign: 'center' }}>
-                                    <p style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '5px' }}>Preview Resit:</p>
-                                    <img
-                                        src={previewUrl}
-                                        alt="Preview Resit"
-                                        style={{
-                                            maxWidth: '100%',
-                                            maxHeight: '300px',
-                                            borderRadius: '8px',
-                                            border: '1px solid #cbd5e1',
-                                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                                        }}
-                                    />
-                                </div>
-                            )}
-                        </div>
-
-                        <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
-                            <button type="button" onClick={() => setStep(3)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
-                            <button type="submit" disabled={loading} className="btn btn-primary" style={{ flex: 1 }}>
-                                {loading ? 'Menghantar...' : 'Hantar Permohonan'}
-                            </button>
-                        </div>
-                    </form>
+            <div className={styles.inputGroup}>
+                <label>Muat Naik Resit <span style={{ color: 'red' }}>*</span></label>
+                <input type="file" onChange={handleFileChange} required accept="image/*" className={styles.input} />
+                {previewUrl && (
+                    <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                        <p style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '5px' }}>Preview Resit:</p>
+                        <img
+                            src={previewUrl}
+                            alt="Preview Resit"
+                            style={{
+                                maxWidth: '100%',
+                                maxHeight: '300px',
+                                borderRadius: '8px',
+                                border: '1px solid #cbd5e1',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                            }}
+                        />
+                    </div>
                 )}
             </div>
-        </div>
+
+            <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
+                <button type="button" onClick={() => setStep(3)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
+                <button type="submit" disabled={loading} className="btn btn-primary" style={{ flex: 1 }}>
+                    {loading ? 'Menghantar...' : 'Hantar Permohonan'}
+                </button>
+            </div>
+        </form>
+    )
+}
+            </div >
+        </div >
     );
 }

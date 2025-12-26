@@ -475,7 +475,7 @@ export default function BeliKad() {
                                     <div className={styles.timerContainer}>
                                         <span className={styles.timerIcon}>⏳</span>
                                         <span className={styles.timerText}>
-                                            Masa Baki: <strong>{formatTime(timeLeft)}</strong>
+                                            Sila lakukan pembayaran dalam masa: <strong>{formatTime(timeLeft)}</strong>
                                         </span>
                                     </div>
 

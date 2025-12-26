@@ -291,7 +291,9 @@
         background: #fffbeb;
         /* Yellow warning background */
         border: 2px solid #f59e0b;
-        color: #b45309;
+        /* Orange border */
+        color: #92400e;
+        /* Darker orange text */
         padding: 1rem;
         border-radius: 12px;
         display: flex;
@@ -299,24 +301,26 @@
         justify-content: center;
         gap: 10px;
         margin-top: 15px;
-        /* Add spacing from QR */
-        font-size: 1.05rem;
+        font-size: 1rem;
         font-weight: 600;
         box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2);
         animation: pulse 2s infinite;
     }
 
     .timerIcon {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
     }
 
     .timerText strong {
-        font-size: 1.4rem;
-        /* Big */
-        font-weight: 800;
+        font-size: 1.5rem;
+        /* Make time very big */
+        font-weight: 900;
         color: #d97706;
+        /* Vibrant orange */
         margin-left: 8px;
-        font-family: monospace;
+        font-family: 'Courier New', monospace;
+        /* Monospace for digital clock look */
+        letter-spacing: 1px;
     }
 
     @keyframes pulse {

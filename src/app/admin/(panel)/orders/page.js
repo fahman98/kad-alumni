@@ -40,30 +40,54 @@ export default function OrdersPage() {
         }
     };
 
-    const updateStatus = async (id, newStatus) => {
-        if (!confirm(`Tukar status kepada ${newStatus}?`)) return;
+    // Confirmation Modal State
+    const [confirmation, setConfirmation] = useState({
+        isOpen: false,
+        message: '',
+        subMessage: '',
+        type: 'info', // info, danger
+        onConfirm: () => { }
+    });
 
-        try {
-            const orderRef = doc(db, "orders", id);
-            await updateDoc(orderRef, {
-                status: newStatus
-            });
-            // Reflect change locally
-            setOrders(orders.map(o => o.id === id ? { ...o, status: newStatus } : o));
-        } catch (error) {
-            alert("Error updating status: " + error.message);
-        }
+    const updateStatus = (id, newStatus) => {
+        setConfirmation({
+            isOpen: true,
+            message: `Tukar status kepada ${newStatus}?`,
+            subMessage: 'Adakah anda pasti mahu mengubah status tempahan ini?',
+            type: 'info',
+            onConfirm: async () => {
+                try {
+                    const orderRef = doc(db, "orders", id);
+                    await updateDoc(orderRef, { status: newStatus });
+                    setOrders(prev => prev.map(o => o.id === id ? { ...o, status: newStatus } : o));
+                    closeConfirmation();
+                } catch (error) {
+                    alert("Error updating status: " + error.message);
+                }
+            }
+        });
     };
 
-    const deleteOrder = async (id) => {
-        if (!confirm("Adakah anda pasti mahu memadam tempahan ini?")) return;
+    const deleteOrder = (id) => {
+        setConfirmation({
+            isOpen: true,
+            message: 'Padam Tempahan?',
+            subMessage: 'Tindakan ini tidak boleh dikembalikan. Adakah anda pasti?',
+            type: 'danger',
+            onConfirm: async () => {
+                try {
+                    await deleteDoc(doc(db, "orders", id));
+                    setOrders(prev => prev.filter(o => o.id !== id));
+                    closeConfirmation();
+                } catch (error) {
+                    alert("Error deleting: " + error.message);
+                }
+            }
+        });
+    };
 
-        try {
-            await deleteDoc(doc(db, "orders", id));
-            setOrders(orders.filter(o => o.id !== id));
-        } catch (error) {
-            alert("Error deleting: " + error.message);
-        }
+    const closeConfirmation = () => {
+        setConfirmation({ ...confirmation, isOpen: false });
     };
 
     // Helper to process Google Drive URLs for image tag
@@ -265,6 +289,47 @@ export default function OrdersPage() {
                             <a href={selectedReceipt} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: '10px 20px', textDecoration: 'none', fontSize: '0.9rem', display: 'inline-block', background: '#2563eb', color: 'white', borderRadius: '8px' }}>
                                 Download Original
                             </a>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Confirmation Modal */}
+            {confirmation.isOpen && (
+                <div className={styles.modalOverlay} onClick={closeConfirmation}>
+                    <div className={styles.modalContent} style={{ maxWidth: '400px', textAlign: 'center', padding: '0 0 20px 0' }} onClick={(e) => e.stopPropagation()}>
+                        <div style={{ padding: '24px 24px 12px 24px' }}>
+                            <div style={{
+                                width: '48px', height: '48px', borderRadius: '50%', margin: '0 auto 16px auto',
+                                background: confirmation.type === 'danger' ? '#fee2e2' : '#e0f2fe',
+                                color: confirmation.type === 'danger' ? '#dc2626' : '#0284c7',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'
+                            }}>
+                                {confirmation.type === 'danger' ? '⚠️' : 'ℹ️'}
+                            </div>
+                            <h3 style={{ margin: '0 0 8px 0', color: '#111827', fontSize: '1.125rem' }}>{confirmation.message}</h3>
+                            <p style={{ margin: 0, color: '#6b7280', fontSize: '0.95rem', lineHeight: '1.5' }}>{confirmation.subMessage}</p>
+                        </div>
+                        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', padding: '0 24px 8px 24px' }}>
+                            <button
+                                onClick={closeConfirmation}
+                                style={{
+                                    padding: '8px 16px', borderRadius: '8px', border: '1px solid #d1d5db', background: 'white',
+                                    color: '#374151', fontWeight: '500', cursor: 'pointer', flex: '1'
+                                }}
+                            >
+                                Batal
+                            </button>
+                            <button
+                                onClick={confirmation.onConfirm}
+                                style={{
+                                    padding: '8px 16px', borderRadius: '8px', border: 'none',
+                                    background: confirmation.type === 'danger' ? '#dc2626' : '#2563eb',
+                                    color: 'white', fontWeight: '500', cursor: 'pointer', flex: '1'
+                                }}
+                            >
+                                {confirmation.type === 'danger' ? 'Padam' : 'Ya, Pasti'}
+                            </button>
                         </div>
                     </div>
                 </div>

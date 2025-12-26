@@ -66,8 +66,8 @@ export default function AdminLogin() {
 
                     <button type="submit" className="btn btn-primary full-width">Log Masuk</button>
                 </form>
-                <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-                    <Link href="/" style={{ color: '#94a3b8', fontSize: '0.9rem', textDecoration: 'none' }}>
+                <div style={{ marginTop: '1rem' }}>
+                    <Link href="/" className="btn btn-outline full-width" style={{ display: 'block', textAlign: 'center' }}>
                         &larr; Kembali ke Utama
                     </Link>
                 </div>

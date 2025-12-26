@@ -339,7 +339,7 @@ export default function OrdersPage() {
                                         </div>
                                     </td>
                                 </tr>
-                            ))}
+                            ))
                         )}
                         {/* Close ternary */}
                         {!loading && paginatedOrders.length === 0 && (

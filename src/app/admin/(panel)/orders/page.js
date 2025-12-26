@@ -279,7 +279,7 @@ export default function OrdersPage() {
                                         }
                                     </div>
                                     {order.pickupMethod === 'delivery' && (
-                                        <div className={styles.cellSub} style={{ fontSize: '0.7rem', maxWidth: '150px' }}>
+                                        <div className={styles.cellSub} style={{ fontSize: '0.7rem', maxWidth: '150px', margin: '4px auto 0' }}>
                                             {order.address}, {order.postcode} {order.city}, {order.state}
                                         </div>
                                     )}

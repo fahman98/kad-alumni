@@ -58,9 +58,46 @@ export default function OrdersPage() {
             onConfirm: async () => {
                 try {
                     const orderRef = doc(db, "orders", id);
-                    await updateDoc(orderRef, { status: newStatus });
-                    setOrders(prev => prev.map(o => o.id === id ? { ...o, status: newStatus } : o));
+                    const updates = { status: newStatus };
+
+                    // If Approving, Generate Card ID if not exists
+                    let loadingMsg = "Updating...";
+
+                    if (newStatus === 'Approved') {
+                        // Simple ID Generation: KM (Kad Matrik/Member) - Year - 4 Random Digits
+                        // Ideally checking for duplicates, but for MVP random is ok.
+                        const currentYear = new Date().getFullYear();
+                        const randomSeq = Math.floor(1000 + Math.random() * 9000); // 1000 - 9999
+                        const generatedCardId = `KM${currentYear}${randomSeq}`;
+
+                        updates.generatedId = generatedCardId; // Save to DB
+
+                        // Trigger Email Notification (Non-blocking usually, but lets await to ensure)
+                        const orderData = orders.find(o => o.id === id);
+                        if (orderData) {
+                            fetch('/api/notify/approve', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    name: orderData.name,
+                                    email: orderData.email,
+                                    ic: orderData.ic,
+                                    cardId: generatedCardId,
+                                    date: new Date().toLocaleDateString('ms-MY')
+                                })
+                            }).catch(err => console.error("Email API failed", err));
+                        }
+                    }
+
+                    await updateDoc(orderRef, updates);
+
+                    setOrders(prev => prev.map(o =>
+                        o.id === id ? { ...o, ...updates } : o
+                    ));
                     closeConfirmation();
+
+                    if (newStatus === 'Approved') alert("Permohonan diluluskan & Email telah dihantar.");
+
                 } catch (error) {
                     alert("Error updating status: " + error.message);
                 }

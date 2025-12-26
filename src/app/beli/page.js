@@ -470,6 +470,15 @@ export default function BeliKad() {
                                         alt="QR Pay"
                                         style={{ maxWidth: '280px', width: '100%', borderRadius: '12px', border: '1px solid #ddd', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
                                     />
+
+                                    {/* Countdown Timer */}
+                                    <div className={styles.timerContainer}>
+                                        <span className={styles.timerIcon}>⏳</span>
+                                        <span className={styles.timerText}>
+                                            Masa Baki: <strong>{formatTime(timeLeft)}</strong>
+                                        </span>
+                                    </div>
+
                                     <div style={{ marginTop: '15px' }}>
                                         <a
                                             href="/qr-pay.jpg"
@@ -480,14 +489,6 @@ export default function BeliKad() {
                                             📥 Download QR
                                         </a>
                                     </div>
-                                </div>
-
-                                {/* Countdown Timer */}
-                                <div className={styles.timerContainer}>
-                                    <span className={styles.timerIcon}>⏳</span>
-                                    <span className={styles.timerText}>
-                                        Sila selesaikan bayaran dalam: <strong>{formatTime(timeLeft)}</strong>
-                                    </span>
                                 </div>
 
                                 <div style={{ background: '#eff6ff', padding: '10px', borderRadius: '8px', fontSize: '0.85rem', color: '#1e40af', marginBottom: '15px', textAlign: 'left' }}>

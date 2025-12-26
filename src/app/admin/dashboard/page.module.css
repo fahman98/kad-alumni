@@ -12,9 +12,9 @@
 /* Sidebar */
 .sidebar {
     width: 280px;
-    background: #111827;
-    /* Gray 900 - Dark Sidebar */
-    border-right: 1px solid #1f2937;
+    background: linear-gradient(180deg, #1e3a8a 0%, #172554 100%);
+    /* Deep Blue Theme */
+    border-right: 1px solid #1e40af;
     display: flex;
     flex-direction: column;
     padding: 1.5rem;
@@ -24,7 +24,12 @@
     top: 0;
     z-index: 50;
     color: #e5e7eb;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
+}
+
+.sidebarClosed {
+    transform: translateX(-100%);
 }
 
 .brand {
@@ -37,6 +42,8 @@
     gap: 12px;
     padding: 0 0.5rem;
     letter-spacing: -0.025em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1.5rem;
 }
 
 .nav {
@@ -52,8 +59,8 @@
     gap: 12px;
     padding: 0.75rem 1rem;
     border-radius: 8px;
-    color: #9ca3af;
-    /* Gray 400 */
+    color: #bfdbfe;
+    /* Blue 200 */
     text-decoration: none;
     font-weight: 500;
     font-size: 0.95rem;
@@ -61,25 +68,25 @@
 }
 
 .navLink:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
 
 .activeLink {
-    background: #374151;
-    /* Gray 700 */
+    background: rgba(255, 255, 255, 0.15);
+    /* Translucent white */
     color: #ffffff;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logoutBtn {
     margin-top: auto;
     padding: 0.75rem 1rem;
-    background: rgba(239, 68, 68, 0.1);
-    /* Red 500 with opacity */
-    color: #f87171;
-    /* Red 400 */
-    border: none;
+    background: rgba(0, 0, 0, 0.2);
+    color: #fca5a5;
+    /* Red 300 */
+    border: 1px solid rgba(239, 68, 68, 0.2);
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
@@ -92,7 +99,8 @@
 
 .logoutBtn:hover {
     background: rgba(239, 68, 68, 0.2);
-    color: #fca5a5;
+    color: #ffffff;
+    border-color: rgba(239, 68, 68, 0.4);
 }
 
 /* Main Content */
@@ -101,6 +109,12 @@
     margin-left: 280px;
     padding: 2.5rem;
     width: calc(100% - 280px);
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mainContentExpanded {
+    margin-left: 0;
+    width: 100%;
 }
 
 /* Header */

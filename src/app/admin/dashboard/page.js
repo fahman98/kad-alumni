@@ -23,6 +23,7 @@ export default function AdminDashboard() {
 
     // Stats
     const [stats, setStats] = useState({ total: 0, pending: 0, revenue: 0, completed: 0 });
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar state
 
     // Helper to process Google Drive URLs for image tag
     const formatGoogleDriveUrl = (url) => {
@@ -188,21 +189,50 @@ export default function AdminDashboard() {
     return (
         <div className={styles.container}>
             {/* Sidebar */}
-            <aside className={styles.sidebar}>
-                <div className={styles.brand}>🎓 Admin Panel</div>
-                <nav className={styles.nav}>
-                    <a href="#" className={`${styles.navLink} ${styles.activeLink}`}>Orders</a>
-                    <a href="#" className={styles.navLink}>Settings</a>
-                    <button onClick={handleLogout} className={styles.logoutBtn}>Log Keluar</button>
-                </nav>
-            </aside>
+            <nav className={`${styles.sidebar} ${!isSidebarOpen ? styles.sidebarClosed : ''}`}>
+                <div className={styles.brand}>
+                    <span>🎓 Admin Panel</span>
+                </div>
+                <div className={styles.nav}>
+                    <a href="#" className={`${styles.navLink} ${styles.activeLink}`}>
+                        <span>📊</span> Dashboard
+                    </a>
+                    <a href="#" className={styles.navLink}>
+                        <span>📦</span> Orders
+                    </a>
+                    <a href="#" className={styles.navLink}>
+                        <span>⚙️</span> Settings
+                    </a>
+                    <button className={styles.logoutBtn} onClick={() => auth.signOut()}>
+                        <span>🚪</span> Log Keluar
+                    </button>
+                </div>
+            </nav>
 
             {/* Main Content */}
-            <main className={styles.mainContent}>
+            <main className={`${styles.mainContent} ${!isSidebarOpen ? styles.mainContentExpanded : ''}`}>
+                {/* Header */}
                 <div className={styles.topbar}>
-                    <div>
-                        <h1>Dashboard</h1>
-                        <p style={{ color: '#64748b' }}>Selamat kembali, Admin.</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                        <button
+                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                fontSize: '1.5rem',
+                                cursor: 'pointer',
+                                color: '#374151',
+                                padding: '5px',
+                                display: 'flex',
+                                alignItems: 'center'
+                            }}
+                        >
+                            ☰
+                        </button>
+                        <div>
+                            <h1>Dashboard</h1>
+                            <p>Selamat kembali, Admin.</p>
+                        </div>
                     </div>
                 </div>
 

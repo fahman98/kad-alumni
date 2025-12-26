@@ -235,6 +235,15 @@ export default function BeliKad() {
             return;
         }
 
+        // Phone Length Check (Min 10 digits)
+        if (formData.phone.length < 10) {
+            setErrors({ phone: true });
+            setAlertType('error');
+            setAlertMessage("Nombor telefon tidak lengkap (minima 10 digit).");
+            setShowAlert(true);
+            return;
+        }
+
         setErrors({}); // Clear errors
         setStep(3);
     };

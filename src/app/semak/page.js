@@ -64,7 +64,7 @@ export default function SemakStatus() {
                 <form onSubmit={handleCheck} className={styles.searchBox}>
                     <input
                         type="text"
-                        placeholder="Masukkan No. Kad Pengenalan / Alumni ID"
+                        placeholder="Masukkan No. Kad Pengenalan"
                         value={id}
                         onChange={(e) => setId(e.target.value)}
                         required

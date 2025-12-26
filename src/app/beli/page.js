@@ -259,8 +259,7 @@ export default function BeliKad() {
                         <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
                             <button onClick={() => setStep(1)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
                             <button
-                                onClick={() => setStep(3)}
-                                disabled={!formData.name || !formData.phone || !formData.gradYear || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)}
+                                onClick={handleNextStep2}
                                 className="btn btn-primary"
                                 style={{ flex: 1 }}
                             >

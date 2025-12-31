@@ -415,11 +415,14 @@ export default function BeliKad() {
                             </button>
                         </div>
                     </div>
+```
                 )}
 
                 {step === 2 && (
                     <div className={styles.step}>
                         <div style={{ marginBottom: '30px' }}>
+                            {/* DEBUG LINE */}
+                            <p style={{background: 'red', color: 'white', padding: '5px', textAlign: 'center'}}>DEBUG: CARD PREVIEW SHOULD BE HERE</p>
                             <CardPreview
                                 name={formData.name}
                                 matricNo={previewMatric}
@@ -439,193 +442,197 @@ export default function BeliKad() {
                                 value={formData.name}
                                 onChange={handleChange}
                                 className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-                                placeholder="Nama Penuh Mengikut IC"
+                placeholder="Nama Penuh Mengikut IC"
                             />
-                        </div>
-                        <div className={styles.row}>
-                            <div className={styles.inputGroup}>
-                                <label>No. Telefon <span style={{ color: 'red' }}>*</span></label>
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    className={`${styles.input} ${errors.phone ? styles.inputError : ''}`}
-                                    placeholder="0123456789"
-                                />
-                            </div>
-                            <div className={styles.inputGroup}>
-                                <label>Email <span style={{ color: 'red' }}>*</span></label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
-                                    placeholder="contoh@gmail.com"
-                                />
-                            </div>
-                            <div className={styles.inputGroup}>
-                                <label>Tahun Graduasi <span style={{ color: 'red' }}>*</span></label>
-                                <input
-                                    type="number"
-                                    name="gradYear"
-                                    value={formData.gradYear}
-                                    onChange={handleChange}
-                                    className={`${styles.input} ${errors.gradYear ? styles.inputError : ''}`}
-                                    placeholder="2023"
-                                />
-                            </div>
-                        </div>
-                        <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
-                            <button onClick={() => setStep(1)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
-                            <button
-                                onClick={handleNextStep2}
-                                className="btn btn-primary"
-                                style={{ flex: 1 }}
-                            >
-                                Seterusnya &rarr;
-                            </button>
-                        </div>
-                    </div>
-                )}
+            </div>
+            <div className={styles.row}>
+                <div className={styles.inputGroup}>
+                    <label>No. Telefon <span style={{ color: 'red' }}>*</span></label>
+                    <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className={`${styles.input} ${errors.phone ? styles.inputError : ''}`}
+                        placeholder="0123456789"
+                    />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label>Email <span style={{ color: 'red' }}>*</span></label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
+                        placeholder="contoh@gmail.com"
+                    />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label>Tahun Graduasi <span style={{ color: 'red' }}>*</span></label>
+                    <input
+                        type="number"
+                        name="gradYear"
+                        value={formData.gradYear}
+                        onChange={handleChange}
+                        className={`${styles.input} ${errors.gradYear ? styles.inputError : ''}`}
+                        placeholder="2023"
+                    />
+                </div>
+            </div>
+            <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
+                <button onClick={() => setStep(1)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
+                <button
+                    onClick={handleNextStep2}
+                    className="btn btn-primary"
+                    style={{ flex: 1 }}
+                >
+                    Seterusnya &rarr;
+                </button>
+            </div>
+        </div>
+    )
+}
 
-                {step === 3 && (
-                    <div className={styles.step}>
-                        <h3>Langkah 3: Kaedah Pengambilan</h3>
+{
+    step === 3 && (
+        <div className={styles.step}>
+            <h3>Langkah 3: Kaedah Pengambilan</h3>
+            <div className={styles.inputGroup}>
+                <label>Pilih Kaedah</label>
+                <select name="pickupMethod" value={formData.pickupMethod} onChange={handleChange} className={styles.input}>
+                    <option value="pickup">Ambil di Pejabat Pusat Alumni</option>
+                    <option value="delivery">Pos (Delivery)</option>
+                </select>
+            </div>
+
+            {formData.pickupMethod === 'delivery' && (
+                <>
+                    <div className={styles.inputGroup}>
+                        <label>Alamat (No. Rumah, Jalan, Taman) <span style={{ color: 'red' }}>*</span></label>
+                        <input type="text" name="address1" value={formData.address1} onChange={handleChange} required className={styles.input} placeholder="Contoh: No 12, Jalan Alumni 1, Taman Pewira" />
+                    </div>
+                    <div className={styles.row}>
                         <div className={styles.inputGroup}>
-                            <label>Pilih Kaedah</label>
-                            <select name="pickupMethod" value={formData.pickupMethod} onChange={handleChange} className={styles.input}>
-                                <option value="pickup">Ambil di Pejabat Pusat Alumni</option>
-                                <option value="delivery">Pos (Delivery)</option>
-                            </select>
-                        </div>
-
-                        {formData.pickupMethod === 'delivery' && (
-                            <>
-                                <div className={styles.inputGroup}>
-                                    <label>Alamat (No. Rumah, Jalan, Taman) <span style={{ color: 'red' }}>*</span></label>
-                                    <input type="text" name="address1" value={formData.address1} onChange={handleChange} required className={styles.input} placeholder="Contoh: No 12, Jalan Alumni 1, Taman Pewira" />
-                                </div>
-                                <div className={styles.row}>
-                                    <div className={styles.inputGroup}>
-                                        <label>Poskod <span style={{ color: 'red' }}>*</span></label>
-                                        <input type="text" name="postcode" value={formData.postcode} onChange={handleChange} required maxLength="5" className={styles.input} placeholder="35900" />
-                                    </div>
-                                    <div className={styles.inputGroup}>
-                                        <label>Bandar {lookupLoading && '...'} <span style={{ color: 'red' }}>*</span></label>
-                                        <input type="text" name="city" value={formData.city} onChange={handleChange} required className={styles.input} />
-                                    </div>
-                                </div>
-                                <div className={styles.inputGroup}>
-                                    <label>Negeri <span style={{ color: 'red' }}>*</span></label>
-                                    <input type="text" name="state" value={formData.state} onChange={handleChange} required className={styles.input} />
-                                </div>
-                                <small className={styles.smallText}>Kos penghantaran ditanggung penerima (DFOD via J&T).</small>
-                            </>
-                        )}
-
-                        <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
-                            <button onClick={() => setStep(2)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
-                            <button
-                                onClick={() => setStep(4)}
-                                disabled={formData.pickupMethod === 'delivery' && (!formData.address1 || !formData.postcode || !formData.city || !formData.state)}
-                                className="btn btn-primary"
-                                style={{ flex: 1 }}
-                            >
-                                Seterusnya &rarr;
-                            </button>
-                        </div>
-                    </div>
-                )}
-
-                {step === 4 && (
-                    <form onSubmit={handleSubmit} className={styles.step}>
-                        <h3>Langkah 4: Bukti Bayaran</h3>
-
-                        <div className={styles.alertInfo}>
-                            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                                <p style={{ marginBottom: '10px' }}>Sila buat bayaran <strong>RM 10.00</strong> ke akaun:</p>
-
-                                {/* QR Code Section */}
-                                <div style={{ marginBottom: '15px' }}>
-                                    <img
-                                        src="/qr-pay.jpg"
-                                        alt="QR Pay"
-                                        style={{ maxWidth: '280px', width: '100%', borderRadius: '12px', border: '1px solid #ddd', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
-                                    />
-
-                                    {/* Countdown Timer */}
-                                    <div className={styles.timerContainer}>
-                                        <span className={styles.timerIcon}>⏳</span>
-                                        <span className={styles.timerText}>
-                                            Sila lakukan pembayaran dalam masa: <strong>{formatTime(timeLeft)}</strong>
-                                        </span>
-                                    </div>
-
-                                    <div style={{ marginTop: '15px' }}>
-                                        <a
-                                            href="/qr-pay.jpg"
-                                            download="QR-Pay-UPSI.jpg"
-                                            className="btn btn-primary"
-                                            style={{ display: 'block', width: '100%', textDecoration: 'none', textAlign: 'center' }}
-                                        >
-                                            📥 Download QR
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div style={{ background: '#eff6ff', padding: '10px', borderRadius: '8px', fontSize: '0.85rem', color: '#1e40af', marginBottom: '15px', textAlign: 'left' }}>
-                                    <strong>💡 Tips Bayaran Pantas:</strong>
-                                    <ol style={{ margin: '5px 0 0 1.2rem', padding: 0 }}>
-                                        <li>Download gambar QR di atas.</li>
-                                        <li>Buka Apps Bank anda (Maybank/CIMB/TnG dll).</li>
-                                        <li>Pilih <strong>Scan QR</strong> &gt; <strong>Select from Gallery</strong>.</li>
-                                    </ol>
-                                </div>
-                            </div>
-                            <small className={styles.smallText} style={{ textAlign: 'center' }}>
-                                *Sila simpan resit pembayaran untuk dimuat naik di bawah.
-                            </small>
+                            <label>Poskod <span style={{ color: 'red' }}>*</span></label>
+                            <input type="text" name="postcode" value={formData.postcode} onChange={handleChange} required maxLength="5" className={styles.input} placeholder="35900" />
                         </div>
                         <div className={styles.inputGroup}>
-                            <label>Muat Naik Resit <span style={{ color: 'red' }}>*</span></label>
-                            <input type="file" onChange={handleFileChange} required accept="image/*" className={styles.input} />
-                            {previewUrl && (
-                                <div style={{ marginTop: '10px', textAlign: 'center' }}>
-                                    <p style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '5px' }}>Preview Resit:</p>
-                                    <img
-                                        src={previewUrl}
-                                        alt="Preview Resit"
-                                        style={{
-                                            maxWidth: '100%',
-                                            maxHeight: '300px',
-                                            borderRadius: '8px',
-                                            border: '1px solid #cbd5e1',
-                                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                                        }}
-                                    />
-                                </div>
-                            )}
+                            <label>Bandar {lookupLoading && '...'} <span style={{ color: 'red' }}>*</span></label>
+                            <input type="text" name="city" value={formData.city} onChange={handleChange} required className={styles.input} />
+                        </div>
+                    </div>
+                    <div className={styles.inputGroup}>
+                        <label>Negeri <span style={{ color: 'red' }}>*</span></label>
+                        <input type="text" name="state" value={formData.state} onChange={handleChange} required className={styles.input} />
+                    </div>
+                    <small className={styles.smallText}>Kos penghantaran ditanggung penerima (DFOD via J&T).</small>
+                </>
+            )}
+
+            <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
+                <button onClick={() => setStep(2)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
+                <button
+                    onClick={() => setStep(4)}
+                    disabled={formData.pickupMethod === 'delivery' && (!formData.address1 || !formData.postcode || !formData.city || !formData.state)}
+                    className="btn btn-primary"
+                    style={{ flex: 1 }}
+                >
+                    Seterusnya &rarr;
+                </button>
+            </div>
+        </div>
+    )
+}
+
+{
+    step === 4 && (
+        <form onSubmit={handleSubmit} className={styles.step}>
+            <h3>Langkah 4: Bukti Bayaran</h3>
+
+            <div className={styles.alertInfo}>
+                <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                    <p style={{ marginBottom: '10px' }}>Sila buat bayaran <strong>RM 10.00</strong> ke akaun:</p>
+
+                    {/* QR Code Section */}
+                    <div style={{ marginBottom: '15px' }}>
+                        <img
+                            src="/qr-pay.jpg"
+                            alt="QR Pay"
+                            style={{ maxWidth: '280px', width: '100%', borderRadius: '12px', border: '1px solid #ddd', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
+                        />
+
+                        {/* Countdown Timer */}
+                        <div className={styles.timerContainer}>
+                            <span className={styles.timerIcon}>⏳</span>
+                            <span className={styles.timerText}>
+                                Sila lakukan pembayaran dalam masa: <strong>{formatTime(timeLeft)}</strong>
+                            </span>
                         </div>
 
-                        {/* ReCAPTCHA */}
-                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
-                            <ReCAPTCHA
-                                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6LfYWzcsAAAAAAnGDiUWPt6_2-n0s0E4cy3vVXSq"}
-                                onChange={(token) => setCaptchaToken(token)}
-                            />
+                        <div style={{ marginTop: '15px' }}>
+                            <a
+                                href="/qr-pay.jpg"
+                                download="QR-Pay-UPSI.jpg"
+                                className="btn btn-primary"
+                                style={{ display: 'block', width: '100%', textDecoration: 'none', textAlign: 'center' }}
+                            >
+                                📥 Download QR
+                            </a>
                         </div>
+                    </div>
 
-                        <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
-                            <button type="button" onClick={() => setStep(3)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
-                            <button type="submit" disabled={loading} className="btn btn-primary" style={{ flex: 1 }}>
-                                {loading ? 'Menghantar...' : 'Hantar Permohonan'}
-                            </button>
-                        </div>
-                    </form>
-                )
-                }
+                    <div style={{ background: '#eff6ff', padding: '10px', borderRadius: '8px', fontSize: '0.85rem', color: '#1e40af', marginBottom: '15px', textAlign: 'left' }}>
+                        <strong>💡 Tips Bayaran Pantas:</strong>
+                        <ol style={{ margin: '5px 0 0 1.2rem', padding: 0 }}>
+                            <li>Download gambar QR di atas.</li>
+                            <li>Buka Apps Bank anda (Maybank/CIMB/TnG dll).</li>
+                            <li>Pilih <strong>Scan QR</strong> &gt; <strong>Select from Gallery</strong>.</li>
+                        </ol>
+                    </div>
+                </div>
+                <small className={styles.smallText} style={{ textAlign: 'center' }}>
+                    *Sila simpan resit pembayaran untuk dimuat naik di bawah.
+                </small>
+            </div>
+            <div className={styles.inputGroup}>
+                <label>Muat Naik Resit <span style={{ color: 'red' }}>*</span></label>
+                <input type="file" onChange={handleFileChange} required accept="image/*" className={styles.input} />
+                {previewUrl && (
+                    <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                        <p style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '5px' }}>Preview Resit:</p>
+                        <img
+                            src={previewUrl}
+                            alt="Preview Resit"
+                            style={{
+                                maxWidth: '100%',
+                                maxHeight: '300px',
+                                borderRadius: '8px',
+                                border: '1px solid #cbd5e1',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                            }}
+                        />
+                    </div>
+                )}
+            </div>
+
+            {/* ReCAPTCHA */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <ReCAPTCHA
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6LfYWzcsAAAAAAnGDiUWPt6_2-n0s0E4cy3vVXSq"}
+                    onChange={(token) => setCaptchaToken(token)}
+                />
+            </div>
+
+            <div className={styles.actions} style={{ display: 'flex', gap: '10px' }}>
+                <button type="button" onClick={() => setStep(3)} className="btn btn-outline" style={{ flex: 1 }}>&larr; Kembali</button>
+                <button type="submit" disabled={loading} className="btn btn-primary" style={{ flex: 1 }}>
+                    {loading ? 'Menghantar...' : 'Hantar Permohonan'}
+                </button>
+            </div>
+        </form>
+    )
+}
             </div >
         </div >
     );

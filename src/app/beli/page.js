@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 import Link from 'next/link';
 import ReCAPTCHA from "react-google-recaptcha";
+import CardPreview from '../components/CardPreview';
 
 export default function BeliKad() {
     const router = useRouter();
@@ -42,6 +43,16 @@ export default function BeliKad() {
             checkPostcode(value);
         }
     };
+
+    // Live Preview State extracted from Form
+    const [previewMatric, setPreviewMatric] = useState('');
+
+    useEffect(() => {
+        // Logik Agak-Agak Matric No dari IC (Demo Purpose)
+        // Kalau user ada letak matricNo nanti kita guna tu, kalau tak kita agak je.
+        const year = formData.gradYear || new Date().getFullYear();
+        setPreviewMatric(`D${year}1${formData.ic.slice(0, 4)}...`);
+    }, [formData.ic, formData.gradYear]);
 
     const checkPostcode = async (postcode) => {
         setLookupLoading(true);
@@ -408,6 +419,17 @@ export default function BeliKad() {
 
                 {step === 2 && (
                     <div className={styles.step}>
+                        <div style={{ marginBottom: '30px' }}>
+                            <CardPreview
+                                name={formData.name}
+                                matricNo={previewMatric}
+                                program="ALUMNI UPSI"
+                            />
+                            <p style={{ textAlign: 'center', fontSize: '0.8rem', color: '#6b7280', marginTop: '-10px' }}>
+                                *Pratonton kad digital anda (Rekaan sebenar mungkin berbeza)
+                            </p>
+                        </div>
+
                         <h3>Langkah 2: Maklumat Peribadi</h3>
                         <div className={styles.inputGroup}>
                             <label>Nama Penuh <span style={{ color: 'red' }}>*</span></label>

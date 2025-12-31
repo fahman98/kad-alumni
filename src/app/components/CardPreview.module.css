@@ -1,0 +1,154 @@
+.cardContainer {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 380px;
+    /* Standard Credit Card Ratio is usually 85.6mm x 53.98mm (~1.58 aspect) */
+    aspect-ratio: 1.586;
+    margin: 0 auto 2rem;
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Abstract Background Pattern */
+.cardBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(255, 215, 0, 0.05) 0%, transparent 20%);
+    z-index: 0;
+}
+
+.cardHeader {
+    padding: 20px 20px 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    z-index: 10;
+}
+
+.logoPlaceholder {
+    width: 45px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    /* Shield shape approx */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.8rem;
+}
+
+.headerText {
+    flex: 1;
+}
+
+.uniName {
+    font-size: 0.7rem;
+    margin: 0;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    color: #e5e7eb;
+}
+
+.cardTitle {
+    font-size: 0.9rem;
+    margin: 2px 0 0;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #fbbf24;
+    /* Gold */
+    letter-spacing: 1px;
+}
+
+.chip {
+    width: 45px;
+    height: 35px;
+    background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+    border-radius: 6px;
+    margin: 10px 0 0 25px;
+    position: relative;
+    z-index: 10;
+    border: 1px solid #64748b;
+}
+
+.chip::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #64748b;
+}
+
+.cardContent {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    right: 25px;
+    z-index: 10;
+}
+
+.fieldGroup label {
+    display: block;
+    font-size: 0.55rem;
+    color: #94a3b8;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+.valueName {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.value {
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.cardFooter {
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+}
+
+.motto {
+    font-size: 0.5rem;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 2px;
+    margin: 0;
+    text-transform: uppercase;
+}
